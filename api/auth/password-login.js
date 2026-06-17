@@ -6,15 +6,25 @@ export default async function handler(req, res) {
   }
 
   const { username, password } = req.body;
-  const validUsername = process.env.AUTH_USERNAME || 'edward';
-  const validPassword = process.env.AUTH_PASSWORD || 'spoke2026';
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password required' });
   }
 
-  if (username !== validUsername || password !== validPassword) {
-    console.log('[AUTH] Invalid credentials attempt');
+  // Parse users from environment variable (JSON format)
+  let users = {};
+  try {
+    if (process.env.USERS_CONFIG) {
+      users = JSON.parse(process.env.USERS_CONFIG);
+    }
+  } catch (error) {
+    console.error('[AUTH] Failed to parse USERS_CONFIG:', error);
+  }
+
+  // Check if user exists and password matches
+  const user = users[username.toLowerCase()];
+  if (!user || user.password !== password) {
+    console.log('[AUTH] Invalid credentials attempt for:', username);
     return res.status(401).json({ error: 'Invalid username or password' });
   }
 
