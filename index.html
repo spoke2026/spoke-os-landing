@@ -6,8 +6,15 @@
 <title>Spoke Operating System</title>
 <link rel="icon" href="/spokefavcon.svg" type="image/svg+xml">
 <script>
-// Check authentication before page loads
+// Check authentication before page loads (skip on localhost)
 (async function() {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+  // Skip auth check on localhost for development
+  if (isLocalhost) {
+    return;
+  }
+
   try {
     const res = await fetch('/api/auth/check');
     const data = await res.json();
@@ -804,7 +811,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
   <div class="ptw-grid">
     <div class="ptw-cell full">
       <div class="ptw-question">Winning aspiration</div>
-      <div class="ptw-answer">Redefining how you gear up your workforce. Smart, Personalised, and Radically Simple.</div>
+      <div class="ptw-answer">Redefining how you gear up your workforce and enhance your brand. Smart, Personalised, and Radically Simple.</div>
       <div class="ptw-detail">Spoke exists to solve the gearing-up problem for any operation that employs a workforce. We start with workwear and we use technology as the enabler that scales our understanding beyond any one person being in the room.</div>
     </div>
     <div class="ptw-cell">
@@ -944,8 +951,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       <thead><tr><th>Industry</th><th>Stance</th><th>Why</th></tr></thead>
       <tbody>
         <tr><td><strong>Agricultural and agri-supply</strong></td><td><span class="badge badge-lead">Lead</span></td><td>Proven traction. Zoetis-style gift-with-purchase campaigns. Ed's network and knowledge makes this the natural Brandforce heartland.</td></tr>
-        <tr><td><strong>Drinks and beverages</strong></td><td><span class="badge badge-grow">Grow</span></td><td>Strong gifting culture, campaign-driven buying behaviour, willingness to spend on premium branded product. High Brandforce fit.</td></tr>
-        <tr><td><strong>Construction</strong></td><td><span class="badge badge-grow">Grow</span></td><td>Project completion gifts, contractor branded outfitting, client relationship gifting. Good fit for premium Brandforce execution.</td></tr>
+<tr><td><strong>Construction</strong></td><td><span class="badge badge-grow">Grow</span></td><td>Project completion gifts, contractor branded outfitting, client relationship gifting. Good fit for premium Brandforce execution.</td></tr>
         <tr><td><strong>Rural servicing businesses</strong></td><td><span class="badge badge-opp">Opportunistic</span></td><td>Vet practices, irrigation suppliers, rural merchants. Gifting to farmer customers is a real and underserved opportunity.</td></tr>
         <tr><td><strong>Corporate and professional services</strong></td><td><span class="badge badge-watch">Watch</span></td><td>Larger market but less Ed-connected. Pursue when a strong introduction exists rather than cold.</td></tr>
       </tbody>
@@ -1827,22 +1833,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       <div class="card-title">Strategy system</div>
       <div class="card-body">The Spoke OS is the single source of truth. Updated monthly at the management meeting. Zara makes all edits. Version controlled with a changelog. Arne owns the update cycle.</div>
     </div>
-  </div>
-
-  <div class="subey">The seven KPIs</div>
-  <div class="table-wrap">
-    <table class="data-table">
-      <thead><tr><th>KPI</th><th>What it measures</th><th>Frequency</th><th>Owner</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Revenue vs budget</strong></td><td>Actual monthly revenue against the 12-month budget by stream</td><td>Monthly</td><td>Lauren presents, Arne and Ed own</td></tr>
-        <tr><td><strong>Gross profit %</strong></td><td>Actual GP% against the 35% target</td><td>Monthly</td><td>Lauren</td></tr>
-        <tr><td><strong>Pipeline value by stream</strong></td><td>Total value of open deals in Workforce Revenue and Brandforce Revenue pipelines</td><td>Weekly</td><td>Ed and Mark</td></tr>
-        <tr><td><strong>Van days completed vs plan</strong></td><td>Actual van days in the field against the monthly plan agreed at the marketing meeting</td><td>Weekly</td><td>Ed</td></tr>
-        <tr><td><strong>Brandforce anchor accounts</strong></td><td>Number of anchor accounts won at $30k to $60k against the Year 1 target of five to ten</td><td>Monthly</td><td>Mark and Ed</td></tr>
-        <tr><td><strong>Average deal age</strong></td><td>Average number of days deals have been open in the pipeline. Seven-day flag triggers review.</td><td>Weekly</td><td>Ed and Mark</td></tr>
-        <tr><td><strong>Sprint tasks complete</strong></td><td>Number of sprint tasks completed versus total across the six Planner projects</td><td>Weekly</td><td>Sage reports, Arne and Ed own</td></tr>
-      </tbody>
-    </table>
   </div>
 
   <hr class="section-divider">
