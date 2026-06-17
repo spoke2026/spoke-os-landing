@@ -7,17 +7,25 @@ export default async function handler(req, res) {
   }
 
   try {
-    const secret = speakeasy.generateSecret({
-      name: 'Spoke OS',
-      issuer: 'Spoke',
-      length: 32
+    const totpSecret = process.env.TOTP_SECRET;
+
+    if (!totpSecret) {
+      return res.status(500).json({ error: 'TOTP not configured' });
+    }
+
+    // Generate QR code URL using the environment secret
+    const otpauthUrl = speakeasy.otpauthURL({
+      secret: totpSecret,
+      encoding: 'base32',
+      label: 'Spoke OS',
+      issuer: 'Spoke'
     });
 
     // Generate QR code as data URL
-    const qrCode = await QRCode.toDataURL(secret.otpauth_url);
+    const qrCode = await QRCode.toDataURL(otpauthUrl);
 
     res.status(200).json({
-      secret: secret.base32,
+      secret: totpSecret,
       qrCode: qrCode
     });
   } catch (error) {
