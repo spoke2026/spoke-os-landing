@@ -148,7 +148,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 .task-cb:checked::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg)}
 
 /* SPRINT TASKS */
-.project{background:var(--white);border-radius:12px;margin:14px 0;overflow:hidden;border:1px solid var(--border)}
+.project{background:var(--white);border-radius:12px;margin:14px 0;overflow:hidden;border:1px solid var(--border);width:100%;box-sizing:border-box}
 .proj-hdr{padding:16px 20px;display:flex;align-items:center;gap:12px}
 .proj-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
 .ic-w{background:var(--mineral)}.ic-b{background:var(--zest-dark)}.ic-t{background:#3B6D11}.ic-m{background:#185FA5}.ic-o{background:#854F0B}.ic-c{background:var(--warn)}
@@ -195,7 +195,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 .export-out{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;display:none;font-size:11px;font-family:monospace;white-space:pre-wrap;color:var(--text);max-height:350px;overflow-y:auto;line-height:1.6}
 
 /* MILESTONE TABLE */
-.ms-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;font-size:13px;margin:14px 0}
+.ms-table{width:100%;box-sizing:border-box;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;font-size:13px;margin:14px 0}
 .ms-table th{background:var(--mineral);color:var(--white);padding:10px 14px;text-align:left;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
 .ms-table td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.5}
 .ms-table tr:nth-child(even) td{background:rgba(64,81,79,0.02)}
@@ -496,7 +496,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 .pipe-stage.key .pipe-name{color:var(--white)}
 .pipe-stage.key .pipe-desc{color:rgba(255,255,255,0.6)}
 
-.revenue-table{display:flex;gap:28px;margin:28px 0;width:100%;align-items:stretch}
+.revenue-table{display:flex;gap:28px;margin:28px 0;align-items:stretch}
 .revenue-column{flex:1;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.05);display:flex;flex-direction:column;min-width:0}
 .revenue-header{padding:24px;color:var(--white);display:flex;flex-direction:column}
 .revenue-header.workforce{background:var(--mineral)}
@@ -1349,7 +1349,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       </div>
     </div>
   </div>
-  </div>
 
   <div class="stat-strip">
     <div class="stat"><div class="stat-num">$6M</div><div class="stat-label">Committed by March 2030</div></div>
@@ -1489,6 +1488,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 </div>
 </div>
 
+</div>
+
 <hr class="section-divider">
 
 <!-- 05 RESOURCING -->
@@ -1589,6 +1590,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 </div>
 </div>
 
+</div>
+
 <div class="tab-panel" id="tab-execution">
 <div id="s5r">
 <div class="section">
@@ -1673,8 +1676,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 <!-- END RESOURCING -->
 
 <hr class="section-divider">
-
-<!-- 06 90-DAY SPRINT -->
 
 <div class="page">
 
@@ -1948,7 +1949,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       <div class="task" id="t18"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Claude licence check</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t18" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Arne" data-tid="t18" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="1hr" data-tid="t18" data-f="time" onchange="sv()"></div><span class="t-dl dl-u">End of June</span></div><div class="t-pl">Planner: Technology &gt; Admin</div></div></div>
       <div class="task" id="t18b"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Determine brand direction for Workforce and Brandforce and how it relates to Spoke</div><div class="t-detail"></div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t18b" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t18b" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="2hrs" data-tid="t18b" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Brand direction</div></div></div>
       <div class="task" id="t31"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">CIN7 to HubSpot spend sync: automate the penetration scoring</div><div class="t-detail">Automate the flow of actual spend data from CIN7 into HubSpot so the customer scoring model updates without manual input. Enables Find Your Five to run on live data.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t31" data-f="pri"><option value="">--</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t31" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="3hrs" data-tid="t31" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Integrations</div></div></div>
-      <div class="task" id="t32"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build the three HubSpot pipelines with six stages each and the deal ageing rule</div><div class="t-detail">Create Workforce Revenue, Brandforce Revenue, and Bespoke Operations pipelines. Load six stages in each: Opportunity Identified, Quote Required, Follow Up Required, Decision Pending, Closed Won, Closed Lost. Configure the seven-day deal ageing flag.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t32" data-f="pri"><option value="">--</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t32" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="3hrs" data-tid="t32" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; HubSpot build</div></div></div></div>
+      <div class="task" id="t32"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build the three HubSpot pipelines with six stages each and the deal ageing rule</div><div class="t-detail">Create Workforce Revenue, Brandforce Revenue, and Bespoke Operations pipelines. Load six stages in each: Opportunity Identified, Quote Required, Follow Up Required, Decision Pending, Closed Won, Closed Lost. Configure the seven-day deal ageing flag.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t32" data-f="pri"><option value="">--</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t32" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="3hrs" data-tid="t32" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; HubSpot build</div></div></div>
     </div>
   </div>
 
@@ -2019,6 +2020,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
   </div>
 
 </div>
+
 </div>
 
 <footer class="site-footer">
