@@ -496,24 +496,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 .pipe-stage.key .pipe-name{color:var(--white)}
 .pipe-stage.key .pipe-desc{color:rgba(255,255,255,0.6)}
 
-.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
-.rev-model{border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-.rev-model-header{padding:20px 24px;background:var(--mineral)}
-.rev-model-header.bf{background:var(--zest-dark)}
-.rev-model-name{font-family:'DM Serif Display',serif;font-style:italic;font-size:22px;color:var(--white);margin-bottom:4px}
-.rev-model-desc{font-size:12px;color:rgba(255,255,255,0.6)}
-.rev-model-
-.rev-model-body{padding:16px 24px;background:var(--white)}
-.rev-stream{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);gap:16px}
-.rev-stream:last-child{border-bottom:none}
-.rev-stream-name{font-size:13px;color:var(--text);font-weight:500}
-.rev-stream-name small{display:block;font-size:11px;color:var(--text-light);font-weight:400;margin-top:2px;line-height:1.4}
-.rev-stream-name small{display:block;font-size:11px;color:var(--text-light);margin-top:2px}
-.rev-amount{font-family:'DM Serif Display',serif;font-size:20px;color:var(--mineral);flex-shrink:0;font-weight:600}
-.rev-total{padding:12px 24px;border-top:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:rgba(64,81,79,0.04)}
-.rev-total-num{font-family:'DM Serif Display',serif;font-size:24px;color:var(--mineral);font-weight:600}
-.rev-total-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)}
-.rev-total-num{font-family:'DM Serif Display',serif;font-size:28px;color:var(--mineral)}
+.revenue-table{display:flex;gap:28px;margin:28px 0;width:100%;align-items:stretch}
+.revenue-column{flex:1;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.05);display:flex;flex-direction:column;min-width:0}
+.revenue-header{padding:24px;color:var(--white);display:flex;flex-direction:column}
+.revenue-header.workforce{background:var(--mineral)}
+.revenue-header.brandforce{background:var(--zest-dark)}
+.revenue-header h3{font-family:'DM Serif Display',serif;font-style:italic;font-size:24px;margin:0 0 8px 0;line-height:1.1}
+.revenue-header p{font-size:13px;margin:0;opacity:0.9;line-height:1.5}
+.revenue-body{padding:24px;background:var(--white);flex:1;display:flex;flex-direction:column}
+.revenue-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.revenue-row:last-child{border-bottom:none;padding-bottom:0}
+.revenue-row.total{padding-top:16px;border-top:2px solid var(--border);font-weight:600}
+.revenue-label{font-size:13px;color:var(--text);flex:1}
+.revenue-detail{display:block;font-size:11px;color:var(--text-light);font-weight:400;margin-top:3px;line-height:1.4}
+.revenue-row.total .revenue-label{font-size:12px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-light);font-weight:600}
+.revenue-value{font-family:'DM Serif Display',serif;font-size:20px;color:var(--mineral);font-weight:600;white-space:nowrap;flex-shrink:0}
+.revenue-row.total .revenue-value{font-size:28px}
 
 .friction-engine{background:var(--mineral);border-radius:16px;padding:36px;margin:28px 0}
 .friction-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:24px;color:var(--white);margin-bottom:8px}
@@ -1309,43 +1307,44 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
   <div class="subhead-eyebrow">The destination: $6M by 31 March 2030</div>
   <p class="prose">The committed goal is $6M by 31 March 2030. It is the non-negotiable line. Both models are built with headroom above the committed line, and there is real potential to exceed $6M, particularly in Workforce as the engine proves itself in new sectors. $6M is the planning base, not the ceiling.</p>
 
-  <div class="rev-grid">
-    <div class="rev-model">
-      <div class="rev-model-header">
-        <div class="rev-model-name">Workforce</div>
-        <div class="rev-model-desc">The crew-gearing engine. Recurring, relationship-led, scalable across industries.</div>
+  <div class="revenue-table">
+    <div class="revenue-column">
+      <div class="revenue-header workforce">
+        <h3>Workforce</h3>
+        <p>The crew-gearing engine. Recurring, relationship-led, scalable across industries.</p>
       </div>
-      <div class="rev-model-body">
-        <div class="rev-stream">
-          <div class="rev-stream-name">Horticulture<small>$1.5M by March 2027. Growing to $3M by March 2030.</small></div>
-          <div class="rev-amount">$3M</div>
+      <div class="revenue-body">
+        <div class="revenue-row">
+          <div class="revenue-label">Horticulture<br><span class="revenue-detail">$1.5M by March 2027. Growing to $3M by March 2030.</span></div>
+          <div class="revenue-value">$3M</div>
         </div>
-        <div class="rev-stream">
-          <div class="rev-stream-name">New sector (TBD)<small>Starts April 2027. Reaches $1M by March 2030.</small></div>
-          <div class="rev-amount">$1M</div>
+        <div class="revenue-row">
+          <div class="revenue-label">New sector (TBD)<br><span class="revenue-detail">Starts April 2027. Reaches $1M by March 2030.</span></div>
+          <div class="revenue-value">$1M</div>
         </div>
-        <div class="rev-total">
-          <div class="rev-total-label">Workforce total by March 2030</div>
-          <div class="rev-total-num">$4M</div>
+        <div class="revenue-row total">
+          <div class="revenue-label">Workforce total by March 2030</div>
+          <div class="revenue-value">$4M</div>
         </div>
       </div>
-    <div class="rev-model">
-      <div class="rev-model-header bf">
-        <div class="rev-model-name">Brandforce</div>
-        <div class="rev-model-desc">The idea-led gifting and campaign engine. Project-based, any industry.</div>
+    </div>
+    <div class="revenue-column">
+      <div class="revenue-header brandforce">
+        <h3>Brandforce</h3>
+        <p>The idea-led gifting and campaign engine. Project-based, any industry.</p>
       </div>
-      <div class="rev-model-body">
-        <div class="rev-stream">
-          <div class="rev-stream-name">Year 1 target<small>$0 to $500k by March 2027. 5 to 10 anchor accounts.</small></div>
-          <div class="rev-amount">$500k</div>
+      <div class="revenue-body">
+        <div class="revenue-row">
+          <div class="revenue-label">Year 1 target<br><span class="revenue-detail">$0 to $500k by March 2027. 5 to 10 anchor accounts.</span></div>
+          <div class="revenue-value">$500k</div>
         </div>
-        <div class="rev-stream">
-          <div class="rev-stream-name">By March 2030<small>Growing across all target industries.</small></div>
-          <div class="rev-amount">$2M</div>
+        <div class="revenue-row">
+          <div class="revenue-label">By March 2030<br><span class="revenue-detail">Growing across all target industries.</span></div>
+          <div class="revenue-value">$2M</div>
         </div>
-        <div class="rev-total">
-          <div class="rev-total-label">Brandforce total by March 2030</div>
-          <div class="rev-total-num">$2M</div>
+        <div class="revenue-row total">
+          <div class="revenue-label">Brandforce total by March 2030</div>
+          <div class="revenue-value">$2M</div>
         </div>
       </div>
     </div>
@@ -1373,12 +1372,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 
   <div class="table-wrap">
     <table class="data-table">
-      <thead><tr><th>Tier</th><th>Accounts</th><th>Each</th><th>Tier total</th><th>Share</th></tr></thead>
+      <thead><tr><th>Tier</th><th>Accounts</th><th>Each</th><th>Tier total</th></tr></thead>
       <tbody>
-        <tr><td><strong>Anchor</strong></td><td>2</td><td>~$300k</td><td>$600k</td><td>36%</td></tr>
-        <tr><td><strong>Major</strong></td><td>6</td><td>~$50k</td><td>$300k</td><td>18%</td></tr>
-        <tr><td><strong>Mid</strong></td><td>25</td><td>$10k to $30k</td><td>$500k</td><td>30%</td></tr>
-        <tr><td><strong>Small</strong></td><td>50</td><td>~$5k+</td><td>$250k</td><td>15%</td></tr>
+        <tr><td><strong>Anchor</strong></td><td>2</td><td>~$300k</td><td>$600k</td></tr>
+        <tr><td><strong>Major</strong></td><td>6</td><td>~$50k</td><td>$300k</td></tr>
+        <tr><td><strong>Mid</strong></td><td>25</td><td>$10k to $30k</td><td>$500k</td></tr>
+        <tr><td><strong>Small</strong></td><td>50</td><td>~$5k+</td><td>$250k</td></tr>
       </tbody>
     </table>
   </div>
@@ -1389,13 +1388,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
   </div>
 
   <div class="subhead-eyebrow">The Brandforce acquisition engine</div>
-  <p class="prose">Brandforce runs on a different motion to Workforce. Ed's van days are committed to hort. Brandforce is driven by the outsourced calling engine on trial this year, at about $50k, plus Ed's existing network and warm referrals from Workforce accounts.</p>
+  <p class="prose">Brandforce runs on a different motion to Workforce. Ed's van days are committed to hort. Brandforce is driven by the outsourced calling engine on trial this year, at about $30k, plus Ed's existing network and warm referrals from Workforce accounts.</p>
 
   <div class="stat-strip">
     <div class="stat"><div class="stat-num">~1,300</div><div class="stat-label">Quality calls per month</div></div>
     <div class="stat"><div class="stat-num">~78</div><div class="stat-label">Accounts per year at 0.5%</div></div>
     <div class="stat"><div class="stat-num">$5k+</div><div class="stat-label">Minimum viable Brandforce job</div></div>
-    <div class="stat"><div class="stat-num">$50k</div><div class="stat-label">Trial calling investment Year 1</div></div>
+    <div class="stat"><div class="stat-num">$30k</div><div class="stat-label">Trial calling investment Year 1</div></div>
   </div>
 
   <div class="subhead-eyebrow">The indent pipeline mechanism</div>
@@ -1446,21 +1445,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
     </div>
   </div>
 
-  <div class="subhead-eyebrow">Operational headcount rule</div>
-  <p class="prose">Roughly one operational FTE per $1M of sales, brought on just ahead of crossing each threshold.</p>
-  <table class="hc-table">
-    <thead><tr><th>Run-rate</th><th>Operational FTEs</th></tr></thead>
-    <tbody>
-      <tr><td>$2M</td><td>3 (current team)</td></tr>
-      <tr><td>$3M</td><td>4</td></tr>
-      <tr><td>$4M</td><td>5</td></tr>
-      <tr><td>$5M</td><td>6</td></tr>
-      <tr><td>$6M</td><td>7</td></tr>
-      <tr><td>Above $6M</td><td>8 to 9</td></tr>
-    </tbody>
-  </table>
-
-  <div class="subhead-eyebrow">Sales workflow design</div>
+<div class="subhead-eyebrow">Sales workflow design</div>
   <p class="prose">The detailed sales workflow, pipeline structure, stage definitions, entry and exit criteria, step-by-step processes, Zember handoff requirements, and HubSpot usage guidelines are locked as a complete build brief. Download the full document below.</p>
 
   <div style="background:var(--white);border-radius:12px;padding:24px;margin:20px 0;border:1px solid var(--border)">
@@ -1693,9 +1678,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 
 <div class="page">
 
-  <div class="vsbe-badge vsbe-e">Execution</div>
   <div class="sec-hdr">
-    <div class="sec-num">E</div>
     <div class="sec-meta">
       <div class="ey">How we run the business</div>
       <h2 class="section-title">Strategy without execution<br>is just a document.</h2>
@@ -1707,7 +1690,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
   <div id="s5r">
 <div class="section">
   <div class="section-header">
-    <div class="section-number">05</div>
     <div class="section-meta">
       <div class="section-eyebrow">How we are resourced</div>
       <h2 class="section-title">The team that executes this plan.</h2>
@@ -1962,9 +1944,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       <div class="task" id="t14"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build custom and indent configurator from Ed's interview brief</div><div class="t-detail">Ed interview done. Produce build brief from interview output. Triggered via Custom button in both Workforce and Brandforce configurators.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t14" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t14" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="5hrs" data-tid="t14" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Custom configurator</div></div></div>
       <div class="task" id="t15"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build curation tool v1</div><div class="t-detail">Active sprint build. Running in a separate Claude Code instance. Deploy internally once stable.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t15" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Arne" data-tid="t15" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="1 day" data-tid="t15" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Curation tool</div></div></div>
       <div class="task" id="t16"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build branding workflow configurator</div><div class="t-detail">Manages the branding workflow. Subtask: document embroidery and print supplier routing by garment category (Yvette, 2hrs, end of July).</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t16" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t16" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="5hrs" data-tid="t16" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Branding configurator</div></div></div>
-      <div class="task" id="t17"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Portal scoping call with Mike at Wired and CIN7 to HubSpot spend sync</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t17" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t17" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="1hr" data-tid="t17" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Integrations</div></div></div>
+      <div class="task" id="t17"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Portal scoping call with Mike at Wired and CIN7 to HubSpot spend sync</div><div class="t-detail"></div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t17" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t17" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="1hr" data-tid="t17" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Integrations</div></div></div>
       <div class="task" id="t18"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Claude licence check</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t18" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Arne" data-tid="t18" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="1hr" data-tid="t18" data-f="time" onchange="sv()"></div><span class="t-dl dl-u">End of June</span></div><div class="t-pl">Planner: Technology &gt; Admin</div></div></div>
-      <div class="task" id="t18b"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Determine brand direction for Workforce and Brandforce and how it relates to Spoke</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t18b" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t18b" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="2hrs" data-tid="t18b" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Brand direction</div></div>
+      <div class="task" id="t18b"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Determine brand direction for Workforce and Brandforce and how it relates to Spoke</div><div class="t-detail"></div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t18b" data-f="pri"><option value="">--</option><option value="A">A</option><option value="B" selected>B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t18b" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="2hrs" data-tid="t18b" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Brand direction</div></div></div>
       <div class="task" id="t31"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">CIN7 to HubSpot spend sync: automate the penetration scoring</div><div class="t-detail">Automate the flow of actual spend data from CIN7 into HubSpot so the customer scoring model updates without manual input. Enables Find Your Five to run on live data.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t31" data-f="pri"><option value="">--</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t31" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="3hrs" data-tid="t31" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; Integrations</div></div></div>
       <div class="task" id="t32"><input type="checkbox" class="task-cb" onchange="tick(this)"><div class="t-body"><div class="t-title">Build the three HubSpot pipelines with six stages each and the deal ageing rule</div><div class="t-detail">Create Workforce Revenue, Brandforce Revenue, and Bespoke Operations pipelines. Load six stages in each: Opportunity Identified, Quote Required, Follow Up Required, Decision Pending, Closed Won, Closed Lost. Configure the seven-day deal ageing flag.</div><div class="t-fields"><div class="t-field"><label>Priority</label><select onchange="sp(this)" data-tid="t32" data-f="pri"><option value="">--</option><option value="A" selected>A</option><option value="B">B</option><option value="C">C</option></select></div><div class="t-field"><label>Owner</label><input type="text" class="oi" value="Ed" data-tid="t32" data-f="owner" onchange="sv()"></div><div class="t-field"><label>Est. time</label><input type="text" value="3hrs" data-tid="t32" data-f="time" onchange="sv()"></div><span class="t-dl dl-s">End of July</span></div><div class="t-pl">Planner: Technology &gt; HubSpot build</div></div></div></div>
     </div>
