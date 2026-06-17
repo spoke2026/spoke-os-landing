@@ -410,24 +410,31 @@
         });
         const data = await response.json();
 
-        // Display the secret key as text
-        if (data.secret) {
-          document.getElementById('secretKey').textContent = data.secret;
+        if (!data.secret) {
+          showMessage(document.getElementById('authMessage'), 'Failed to get authenticator setup', 'error');
+          return;
         }
 
-        // Try to show QR code if available, but don't fail if it doesn't work
-        if (data.qrCode) {
-          const img = document.createElement('img');
-          img.src = data.qrCode;
-          img.alt = 'QR Code';
-          img.style.maxWidth = '200px';
-          img.style.border = '2px solid #ddd';
-          img.style.padding = '8px';
-          img.style.borderRadius = '4px';
-          img.style.marginBottom = '16px';
-          img.onerror = () => console.log('QR code image failed to load, but secret is displayed above');
-          document.getElementById('qrContainer').insertBefore(img, document.getElementById('secretKey').parentElement);
-        }
+        // Display the secret key as text
+        document.getElementById('secretKey').textContent = data.secret;
+
+        // Generate QR code using free API service
+        const otpauthUrl = `otpauth://totp/Spoke OS (${currentUsername})?secret=${data.secret}&issuer=Spoke`;
+        const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauthUrl)}`;
+
+        const img = document.createElement('img');
+        img.src = qrApiUrl;
+        img.alt = 'QR Code';
+        img.style.maxWidth = '200px';
+        img.style.border = '2px solid #ddd';
+        img.style.padding = '8px';
+        img.style.borderRadius = '4px';
+        img.style.marginBottom = '16px';
+        img.style.display = 'block';
+
+        // Insert QR code before secret key display
+        const secretKeyContainer = document.getElementById('secretKey').parentElement;
+        document.getElementById('qrContainer').insertBefore(img, secretKeyContainer);
       } catch (error) {
         console.error('Failed to get authenticator setup:', error);
         showMessage(document.getElementById('authMessage'), 'Failed to get authenticator setup', 'error');
