@@ -37,13 +37,18 @@
       border-radius: 8px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       padding: 48px;
-      max-width: 400px;
+      max-width: 500px;
       width: 100%;
     }
 
     .login-header {
       text-align: center;
       margin-bottom: 32px;
+    }
+
+    .login-header img {
+      height: 80px;
+      margin-bottom: 24px;
     }
 
     .login-header h1 {
@@ -81,6 +86,7 @@
       letter-spacing: 4px;
       text-align: center;
       font-weight: 600;
+      box-sizing: border-box;
     }
 
     input[type="text"]:focus {
@@ -167,11 +173,6 @@
     .qr-container {
       text-align: center;
       margin: 24px 0;
-      display: none;
-    }
-
-    .qr-container.show {
-      display: block;
     }
 
     .qr-container img {
@@ -187,179 +188,76 @@
       margin-top: 16px;
       line-height: 1.5;
     }
-
-    .step-indicator {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 32px;
-      justify-content: center;
-    }
-
-    .step {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #ddd;
-      color: #666;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .step.active {
-      background: var(--zest);
-      color: var(--black);
-    }
-
-    .step.complete {
-      background: #4CAF50;
-      color: white;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .section.show {
-      display: block;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .button-group button {
-      flex: 1;
-    }
-
-    button.secondary {
-      background: #ddd;
-      color: var(--black);
-    }
-
-    button.secondary:hover {
-      background: #ccc;
-    }
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-header">
-      <img src="/spoke-logo-landscape-mineral.png" alt="Spoke" style="height: 80px; margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto;">
-      <p>Authenticator Login</p>
+      <img src="/spoke-logo-landscape-mineral.png" alt="Spoke" />
+      <h1>Spoke OS</h1>
+      <p>Secure Authentication</p>
     </div>
 
-    <div class="step-indicator">
-      <div class="step active" id="step1">1</div>
-      <div class="step" id="step2">2</div>
-    </div>
-
-    <!-- Step 1: Setup QR Code -->
-    <div id="setupSection" class="section show">
-      <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--mineral);">Scan QR Code</h2>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">Open Google Authenticator on your phone and scan this code:</p>
-
-      <div class="qr-container show" id="qrContainer">
+    <div class="form-group">
+      <label>Scan QR Code with Google Authenticator</label>
+      <div class="qr-container" id="qrContainer">
         <img id="qrCode" alt="QR Code" />
         <div class="qr-instructions">
           <strong>Don't have Google Authenticator?</strong><br>
-          Download it free from your app store.
+          Download it free from your app store, then scan this code.
         </div>
       </div>
-
-      <button onclick="skipSetup()">Already Have Authenticator?</button>
-      <div id="setupMessage" class="message"></div>
-      <div id="setupLoading" class="loading"></div>
     </div>
 
-    <!-- Step 2: Verify Code -->
-    <div id="verifySection" class="section">
-      <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--mineral);">Enter 6-Digit Code</h2>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">Enter the code shown in Google Authenticator:</p>
+    <div class="form-group">
+      <label>Enter 6-digit code:</label>
+      <input
+        type="text"
+        id="code"
+        placeholder="000000"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="off"
+      />
+      <button onclick="verifyCode()">Verify Code</button>
+    </div>
 
-      <form id="verifyForm" onsubmit="verifyCode(event)">
-        <div class="form-group">
-          <input
-            type="text"
-            id="code"
-            name="code"
-            placeholder="000000"
-            maxlength="6"
-            inputmode="numeric"
-            pattern="[0-9]{6}"
-            required
-            autocomplete="off"
-          >
-        </div>
-        <button type="submit" id="verifyBtn">Verify Code</button>
-      </form>
-
-      <button class="secondary" onclick="goBack()" style="margin-top: 12px;">Back</button>
-      <div id="verifyMessage" class="message"></div>
-      <div id="verifyLoading" class="loading"></div>
+    <div id="message" class="message"></div>
+    <div id="loading" class="loading">
+      <span class="spinner"></span>
+      Verifying...
     </div>
   </div>
 
   <script>
-    let currentSecret = null;
-
-    // Step 1: Generate and display QR code
-    async function initializeSetup() {
-      const setupLoading = document.getElementById('setupLoading');
-      setupLoading.innerHTML = '<span class="spinner"></span> Generating QR code...';
-      setupLoading.classList.add('show');
-
+    // Generate QR code on page load
+    async function initializeQR() {
       try {
         const response = await fetch('/api/auth/totp-setup', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          credentials: 'include'
         });
-
         const data = await response.json();
-
-        if (response.ok) {
-          currentSecret = data.secret;
-          document.getElementById('qrCode').src = data.qrCode;
-          setupLoading.classList.remove('show');
-        } else {
-          showSetupMessage('Failed to generate QR code', 'error');
-          setupLoading.classList.remove('show');
-        }
+        document.getElementById('qrCode').src = data.qrCode;
       } catch (error) {
-        console.error('Setup error:', error);
-        showSetupMessage('Error generating QR code', 'error');
-        setupLoading.classList.remove('show');
+        console.error('Failed to generate QR code:', error);
+        showMessage('Failed to generate QR code', 'error');
       }
     }
 
-    function skipSetup() {
-      // Move to verification step
-      document.getElementById('setupSection').classList.remove('show');
-      document.getElementById('verifySection').classList.add('show');
-      document.getElementById('step1').classList.add('complete');
-      document.getElementById('step2').classList.add('active');
-      document.getElementById('code').focus();
-    }
-
-    async function verifyCode(event) {
-      event.preventDefault();
-
+    async function verifyCode() {
       const code = document.getElementById('code').value.trim();
-      const verifyBtn = document.getElementById('verifyBtn');
-      const verifyLoading = document.getElementById('verifyLoading');
+      const messageDiv = document.getElementById('message');
+      const loadingDiv = document.getElementById('loading');
+      const codeInput = document.getElementById('code');
 
-      if (code.length !== 6) {
-        showVerifyMessage('Code must be 6 digits', 'error');
+      if (!code || code.length !== 6) {
+        showMessage('Code must be 6 digits', 'error');
         return;
       }
 
-      verifyBtn.disabled = true;
-      verifyLoading.innerHTML = '<span class="spinner"></span> Verifying...';
-      verifyLoading.classList.add('show');
+      loadingDiv.classList.add('show');
+      messageDiv.classList.remove('show');
 
       try {
         const response = await fetch('/api/auth/totp-verify', {
@@ -370,61 +268,40 @@
         });
 
         const data = await response.json();
-        console.log('Verification response:', { status: response.status, data });
-        console.log('Response headers:', Array.from(response.headers.entries()));
-        console.log('Cookies after verify:', document.cookie);
 
         if (response.ok) {
-          showVerifyMessage('✓ Authenticated! Redirecting...', 'success');
-          console.log('Success - redirecting in 1.5s');
+          showMessage('✓ Authenticated! Redirecting...', 'success');
           setTimeout(() => {
-            console.log('Cookies before redirect:', document.cookie);
             window.location.href = '/dashboard.html';
           }, 1500);
         } else {
-          console.error('Verification failed:', data.error);
-          showVerifyMessage('Invalid code. Try again.', 'error');
-          document.getElementById('code').value = '';
-          document.getElementById('code').focus();
+          showMessage('Invalid code. Try again.', 'error');
+          codeInput.value = '';
+          codeInput.focus();
         }
       } catch (error) {
-        console.error('Verify error:', error);
-        showVerifyMessage('Authentication failed', 'error');
+        console.error('Verification error:', error);
+        showMessage('Authentication failed. Try again.', 'error');
       } finally {
-        verifyBtn.disabled = false;
-        verifyLoading.classList.remove('show');
+        loadingDiv.classList.remove('show');
       }
     }
 
-    function goBack() {
-      document.getElementById('setupSection').classList.add('show');
-      document.getElementById('verifySection').classList.remove('show');
-      document.getElementById('step1').classList.remove('complete');
-      document.getElementById('step2').classList.remove('active');
-      document.getElementById('code').value = '';
+    function showMessage(text, type) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = text;
+      messageDiv.className = `message ${type} show`;
     }
 
-    function showSetupMessage(text, type) {
-      const msg = document.getElementById('setupMessage');
-      msg.textContent = text;
-      msg.className = `message ${type} show`;
-    }
-
-    function showVerifyMessage(text, type) {
-      const msg = document.getElementById('verifyMessage');
-      msg.textContent = text;
-      msg.className = `message ${type} show`;
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', initializeSetup);
-
-    // Auto-focus on code input when it becomes visible
+    // Auto-submit on 6 digits
     document.getElementById('code').addEventListener('input', function() {
       if (this.value.length === 6) {
-        document.getElementById('verifyForm').submit();
+        verifyCode();
       }
     });
+
+    // Initialize QR code on page load
+    document.addEventListener('DOMContentLoaded', initializeQR);
   </script>
 </body>
 </html>
