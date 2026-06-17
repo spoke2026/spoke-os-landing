@@ -368,12 +368,16 @@
           body: JSON.stringify({ code })
         });
 
+        const data = await response.json();
+        console.log('Verification response:', { status: response.status, data });
+
         if (response.ok) {
           showVerifyMessage('✓ Authenticated! Redirecting...', 'success');
           setTimeout(() => {
             window.location.href = '/dashboard.html';
           }, 1500);
         } else {
+          console.error('Verification failed:', data.error);
           showVerifyMessage('Invalid code. Try again.', 'error');
           document.getElementById('code').value = '';
           document.getElementById('code').focus();

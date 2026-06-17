@@ -9,37 +9,40 @@ export default async function handler(req, res) {
   const { code } = req.body;
   const totp_secret = process.env.TOTP_SECRET;
 
+  console.log('[TOTP] Verification attempt:', {
+    code: code,
+    hasSecret: !!totp_secret,
+    secretLength: totp_secret?.length
+  });
+
   if (!code || !totp_secret) {
-    return res.status(400).json({ error: 'Invalid request' });
+    console.log('[TOTP] Missing code or secret');
+    return res.status(400).json({ error: 'Invalid request', missing: !code ? 'code' : 'secret' });
   }
 
   try {
-    // Verify the TOTP code
+    // Verify the TOTP code - convert to string and remove any whitespace
+    const codeStr = String(code).trim();
+    console.log('[TOTP] Verifying code:', codeStr, 'length:', codeStr.length);
+
     const verified = speakeasy.totp.verify({
       secret: totp_secret,
       encoding: 'base32',
-      token: code,
+      token: codeStr,
       window: 2 // Allow codes from ±30 seconds
     });
 
+    console.log('[TOTP] Verification result:', verified);
+
     if (!verified) {
+      console.log('[TOTP] Code verification failed');
       return res.status(401).json({ error: 'Invalid code' });
     }
 
+    console.log('[TOTP] Code verified, creating session');
+
     // Generate session token
     const sessionToken = crypto.randomBytes(32).toString('hex');
-    const sessionSecret = process.env.SESSION_SECRET || 'dev-secret-key';
-    const payload = {
-      authenticated: true,
-      timestamp: Date.now(),
-      token: sessionToken
-    };
-
-    // Create HMAC signature
-    const hmac = crypto
-      .createHmac('sha256', sessionSecret)
-      .update(JSON.stringify(payload))
-      .digest('hex');
 
     // Set httpOnly cookie with session
     res.setHeader(
@@ -47,12 +50,14 @@ export default async function handler(req, res) {
       `auth_session=${sessionToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`
     );
 
+    console.log('[TOTP] Session created, redirecting to dashboard');
+
     res.status(200).json({
       authenticated: true,
       message: 'Successfully authenticated'
     });
   } catch (error) {
-    console.error('TOTP verification error:', error);
-    res.status(500).json({ error: 'Authentication failed' });
+    console.error('[TOTP] Verification error:', error);
+    res.status(500).json({ error: 'Authentication failed', details: error.message });
   }
 }
