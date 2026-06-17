@@ -3,11 +3,11 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Clear auth cookies
-  res.setHeader('Set-Cookie', [
-    'auth_token=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0',
-    'auth_email=; Path=/; Secure; SameSite=Strict; Max-Age=0'
-  ]);
+  // Clear auth cookie
+  res.setHeader(
+    'Set-Cookie',
+    'auth_session=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0'
+  );
 
   return res.status(200).json({ message: 'Logged out successfully' });
 }

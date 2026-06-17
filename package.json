@@ -6,11 +6,18 @@
     "dev": "vercel dev",
     "build": "echo 'Static HTML with serverless functions'"
   },
-  "keywords": ["spoke", "landing", "giveaway", "authentication"],
+  "keywords": [
+    "spoke",
+    "landing",
+    "giveaway",
+    "authentication"
+  ],
   "author": "Edward",
   "license": "MIT",
   "dependencies": {
-    "resend": "^3.0.0"
+    "qrcode": "^1.5.4",
+    "resend": "^3.0.0",
+    "speakeasy": "^2.0.0"
   },
   "engines": {
     "node": "24.x"
