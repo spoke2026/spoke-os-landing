@@ -6,28 +6,34 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { username } = req.body;
+
+  console.log('[TOTP-SETUP] Username received:', username);
+
+  if (!username) {
+    return res.status(400).json({ error: 'Username required' });
+  }
+
   try {
-    const { username } = req.body;
-
-    if (!username) {
-      return res.status(400).json({ error: 'Username required' });
-    }
-
     // Extract just the username part (before @ if email)
     const usernamePart = username.split('@')[0];
-
-    // Get per-user TOTP secret from environment (e.g., AUTH_TOTP_edward)
     const envKey = `AUTH_TOTP_${usernamePart.toUpperCase()}`;
+
+    console.log('[TOTP-SETUP] Looking for env key:', envKey);
+    console.log('[TOTP-SETUP] Available env keys:', Object.keys(process.env).filter(k => k.startsWith('AUTH_TOTP')));
+
     let totpSecret = process.env[envKey];
 
     if (!totpSecret) {
-      // Secret not found - return error with instructions
+      console.log('[TOTP-SETUP] Secret not found for:', envKey);
       return res.status(400).json({
-        error: 'User TOTP secret not configured',
-        message: `Please add ${envKey} to environment variables in Vercel`,
-        help: 'Contact administrator to set up your authenticator'
+        error: 'TOTP secret not configured for this user',
+        key: envKey,
+        help: 'Administrator needs to add this to Vercel environment variables'
       });
     }
+
+    console.log('[TOTP-SETUP] Secret found, generating QR code');
 
     console.log(`[TOTP] Using secret for user: ${username}`);
 
