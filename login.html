@@ -298,12 +298,16 @@
     <div id="authSection" class="section">
       <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--mineral);">Step 2: Authenticate</h2>
 
-      <!-- QR Code (shown only on first setup) -->
+      <!-- TOTP Secret (shown only on first setup) -->
       <div id="qrContainer" class="qr-container">
-        <img id="qrCode" alt="QR Code" />
+        <div style="background: #f5f5f5; padding: 16px; border-radius: 4px; margin-bottom: 16px;">
+          <p style="font-size: 12px; color: #666; margin-bottom: 8px;">Your authenticator secret:</p>
+          <p id="secretKey" style="font-family: monospace; font-size: 14px; font-weight: bold; word-break: break-all; margin: 0; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 4px; user-select: all;">Loading...</p>
+          <p style="font-size: 11px; color: #999; margin-top: 8px; margin-bottom: 0;">Copy this and paste into Google Authenticator, or scan the QR code if available.</p>
+        </div>
         <div class="qr-instructions">
           <strong>First time?</strong><br>
-          Scan this QR code with Google Authenticator, then enter the 6-digit code below.
+          Add this secret to Google Authenticator, then enter the 6-digit code below.
         </div>
       </div>
 
@@ -405,10 +409,28 @@
           credentials: 'include'
         });
         const data = await response.json();
-        document.getElementById('qrCode').src = data.qrCode;
+
+        // Display the secret key as text
+        if (data.secret) {
+          document.getElementById('secretKey').textContent = data.secret;
+        }
+
+        // Try to show QR code if available, but don't fail if it doesn't work
+        if (data.qrCode) {
+          const img = document.createElement('img');
+          img.src = data.qrCode;
+          img.alt = 'QR Code';
+          img.style.maxWidth = '200px';
+          img.style.border = '2px solid #ddd';
+          img.style.padding = '8px';
+          img.style.borderRadius = '4px';
+          img.style.marginBottom = '16px';
+          img.onerror = () => console.log('QR code image failed to load, but secret is displayed above');
+          document.getElementById('qrContainer').insertBefore(img, document.getElementById('secretKey').parentElement);
+        }
       } catch (error) {
-        console.error('Failed to generate QR code:', error);
-        showMessage(document.getElementById('authMessage'), 'Failed to generate QR code', 'error');
+        console.error('Failed to get authenticator setup:', error);
+        showMessage(document.getElementById('authMessage'), 'Failed to get authenticator setup', 'error');
       }
     }
 
