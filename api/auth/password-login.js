@@ -1,5 +1,15 @@
 import crypto from 'crypto';
 
+// Simple user list - add users as AUTH_<USERNAME_PART>=<password>
+// e.g., AUTH_ARNE=spoke.arne.beatson
+const VALID_USERS = {
+  'arne@spoke.nz': process.env.AUTH_ARNE,
+  'mark@spoke.nz': process.env.AUTH_MARK,
+  'jherd@focusplan.co.nz': process.env.AUTH_JONATHAN,
+  'sage@spoke.nz': process.env.AUTH_SAGE,
+  'edward@spoke.nz': process.env.AUTH_EDWARD
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -11,20 +21,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Username and password required' });
   }
 
-  // Parse users from environment variable (JSON format)
-  let users = {};
-  try {
-    if (process.env.USERS_CONFIG) {
-      users = JSON.parse(process.env.USERS_CONFIG);
-    }
-  } catch (error) {
-    console.error('[AUTH] Failed to parse USERS_CONFIG:', error);
-  }
+  const validPassword = VALID_USERS[username.toLowerCase()];
 
-  // Check if user exists and password matches
-  const user = users[username.toLowerCase()];
-  if (!user || user.password !== password) {
-    console.log('[AUTH] Invalid credentials attempt for:', username);
+  if (!validPassword || password !== validPassword) {
+    console.log('[AUTH] Invalid credentials for:', username);
     return res.status(401).json({ error: 'Invalid username or password' });
   }
 
