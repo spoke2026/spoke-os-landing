@@ -75,7 +75,8 @@
       margin-bottom: 8px;
     }
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
       padding: 12px 16px;
       border: 2px solid #ddd;
@@ -83,16 +84,20 @@
       font-size: 16px;
       font-family: 'DM Sans', sans-serif;
       transition: border-color 0.2s;
-      letter-spacing: 4px;
-      text-align: center;
-      font-weight: 600;
       box-sizing: border-box;
     }
 
-    input[type="text"]:focus {
+    input[type="text"]:focus,
+    input[type="password"]:focus {
       outline: none;
       border-color: var(--zest);
       box-shadow: 0 0 0 3px rgba(190, 218, 129, 0.1);
+    }
+
+    input[type="text"].code-input {
+      letter-spacing: 4px;
+      text-align: center;
+      font-weight: 600;
     }
 
     button {
@@ -141,6 +146,63 @@
       display: block;
     }
 
+    .section {
+      display: none;
+    }
+
+    .section.show {
+      display: block;
+    }
+
+    .qr-container {
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .qr-container img {
+      max-width: 200px;
+      border: 2px solid #ddd;
+      padding: 8px;
+      border-radius: 4px;
+    }
+
+    .qr-instructions {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
+    .step-indicator {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      justify-content: center;
+    }
+
+    .step {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ddd;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .step.active {
+      background: var(--zest);
+      color: var(--black);
+    }
+
+    .step.complete {
+      background: #4CAF50;
+      color: white;
+    }
+
     .loading {
       display: none;
       text-align: center;
@@ -169,25 +231,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    .qr-container {
-      text-align: center;
-      margin: 24px 0;
-    }
-
-    .qr-container img {
-      max-width: 200px;
-      border: 2px solid #ddd;
-      padding: 8px;
-      border-radius: 4px;
-    }
-
-    .qr-instructions {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 16px;
-      line-height: 1.5;
-    }
   </style>
 </head>
 <body>
@@ -195,43 +238,109 @@
     <div class="login-header">
       <img src="/spoke-logo-landscape-mineral.png" alt="Spoke" />
       <h1>Spoke OS</h1>
-      <p>Secure Authentication</p>
+      <p>Secure Access</p>
     </div>
 
-    <div class="form-group">
-      <label>Scan QR Code with Google Authenticator</label>
-      <div class="qr-container" id="qrContainer">
-        <img id="qrCode" alt="QR Code" />
-        <div class="qr-instructions">
-          <strong>Don't have Google Authenticator?</strong><br>
-          Download it free from your app store, then scan this code.
+    <div class="step-indicator">
+      <div class="step active" id="step1">1</div>
+      <div class="step" id="step2">2</div>
+    </div>
+
+    <!-- STEP 1: Username & Password -->
+    <div id="passwordSection" class="section show">
+      <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--mineral);">Step 1: Login</h2>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="username" required />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="password" required />
+      </div>
+
+      <button onclick="verifyPassword()">Continue</button>
+      <div id="passwordMessage" class="message"></div>
+      <div id="passwordLoading" class="loading"></div>
+    </div>
+
+    <!-- STEP 2: Authenticator -->
+    <div id="authSection" class="section">
+      <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--mineral);">Step 2: Authenticate</h2>
+
+      <div class="form-group">
+        <label>Scan with Google Authenticator</label>
+        <div class="qr-container" id="qrContainer">
+          <img id="qrCode" alt="QR Code" />
+          <div class="qr-instructions">
+            <strong>Don't have it?</strong><br>Download Google Authenticator, then scan this code.
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Enter 6-digit code:</label>
-      <input
-        type="text"
-        id="code"
-        placeholder="000000"
-        maxlength="6"
-        inputmode="numeric"
-        autocomplete="off"
-      />
-      <button onclick="verifyCode()">Verify Code</button>
-    </div>
+      <div class="form-group">
+        <label>Enter 6-digit code</label>
+        <input type="text" id="code" class="code-input" placeholder="000000" maxlength="6" inputmode="numeric" />
+      </div>
 
-    <div id="message" class="message"></div>
-    <div id="loading" class="loading">
-      <span class="spinner"></span>
-      Verifying...
+      <button onclick="verifyCode()">Verify</button>
+      <button style="background: #ddd; color: var(--black); margin-top: 12px;" onclick="goBackToPassword()">Back</button>
+      <div id="authMessage" class="message"></div>
+      <div id="authLoading" class="loading"></div>
     </div>
   </div>
 
   <script>
-    // Generate QR code on page load
-    async function initializeQR() {
+    let tempToken = null;
+
+    async function verifyPassword() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const messageDiv = document.getElementById('passwordMessage');
+      const loadingDiv = document.getElementById('passwordLoading');
+
+      if (!username || !password) {
+        showMessage(messageDiv, 'Please enter username and password', 'error');
+        return;
+      }
+
+      loadingDiv.classList.add('show');
+      messageDiv.classList.remove('show');
+
+      try {
+        const response = await fetch('/api/auth/password-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          tempToken = data.token;
+          showMessage(messageDiv, '✓ Credentials verified', 'success');
+          setTimeout(() => {
+            goToAuthenticator();
+          }, 1000);
+        } else {
+          showMessage(messageDiv, data.error || 'Invalid credentials', 'error');
+        }
+      } catch (error) {
+        console.error('Password verification error:', error);
+        showMessage(messageDiv, 'Login failed. Try again.', 'error');
+      } finally {
+        loadingDiv.classList.remove('show');
+      }
+    }
+
+    async function goToAuthenticator() {
+      document.getElementById('passwordSection').classList.remove('show');
+      document.getElementById('authSection').classList.add('show');
+      document.getElementById('step1').classList.add('complete');
+      document.getElementById('step2').classList.add('active');
+
+      // Generate QR code
       try {
         const response = await fetch('/api/auth/totp-setup', {
           method: 'POST',
@@ -241,18 +350,17 @@
         document.getElementById('qrCode').src = data.qrCode;
       } catch (error) {
         console.error('Failed to generate QR code:', error);
-        showMessage('Failed to generate QR code', 'error');
+        showMessage(document.getElementById('authMessage'), 'Failed to generate QR code', 'error');
       }
     }
 
     async function verifyCode() {
       const code = document.getElementById('code').value.trim();
-      const messageDiv = document.getElementById('message');
-      const loadingDiv = document.getElementById('loading');
-      const codeInput = document.getElementById('code');
+      const messageDiv = document.getElementById('authMessage');
+      const loadingDiv = document.getElementById('authLoading');
 
       if (!code || code.length !== 6) {
-        showMessage('Code must be 6 digits', 'error');
+        showMessage(messageDiv, 'Code must be 6 digits', 'error');
         return;
       }
 
@@ -263,34 +371,41 @@
         const response = await fetch('/api/auth/totp-verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
+          body: JSON.stringify({ code, token: tempToken }),
           credentials: 'include'
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          showMessage('✓ Authenticated! Redirecting to Spoke OS...', 'success');
+          showMessage(messageDiv, '✓ Authenticated! Redirecting...', 'success');
           setTimeout(() => {
             window.location.href = '/index.html';
           }, 1500);
         } else {
-          showMessage('Invalid code. Try again.', 'error');
-          codeInput.value = '';
-          codeInput.focus();
+          showMessage(messageDiv, data.error || 'Invalid code', 'error');
+          document.getElementById('code').value = '';
+          document.getElementById('code').focus();
         }
       } catch (error) {
-        console.error('Verification error:', error);
-        showMessage('Authentication failed. Try again.', 'error');
+        console.error('Code verification error:', error);
+        showMessage(messageDiv, 'Verification failed', 'error');
       } finally {
         loadingDiv.classList.remove('show');
       }
     }
 
-    function showMessage(text, type) {
-      const messageDiv = document.getElementById('message');
-      messageDiv.textContent = text;
-      messageDiv.className = `message ${type} show`;
+    function goBackToPassword() {
+      document.getElementById('authSection').classList.remove('show');
+      document.getElementById('passwordSection').classList.add('show');
+      document.getElementById('step1').classList.remove('complete');
+      document.getElementById('step2').classList.remove('active');
+      tempToken = null;
+    }
+
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = `message ${type} show`;
     }
 
     // Auto-submit on 6 digits
@@ -299,9 +414,6 @@
         verifyCode();
       }
     });
-
-    // Initialize QR code on page load
-    document.addEventListener('DOMContentLoaded', initializeQR);
   </script>
 </body>
 </html>
