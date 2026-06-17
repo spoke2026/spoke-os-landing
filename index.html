@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spoke Operating System</title>
+<script>
+// Check authentication before page loads
+(async function() {
+  try {
+    const res = await fetch('/api/auth/check');
+    const data = await res.json();
+    if (!data.authenticated) {
+      window.location.href = '/login.html';
+    }
+  } catch (error) {
+    window.location.href = '/login.html';
+  }
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -31,6 +45,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
 .site-nav a:hover{color:var(--zest)}
 .site-nav a.active{color:var(--white);border-bottom-color:var(--zest)}
 .site-meta{font-size:10px;color:rgba(255,255,255,0.3);text-align:right;line-height:1.5}
+.logout-btn{background:var(--zest);color:var(--black);border:none;padding:8px 16px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:background-color 0.2s}
+.logout-btn:hover{background-color:#a4c767}
 
 /* TAB PANELS */
 .tab-panel{display:none}
@@ -566,6 +582,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--stone);color:var(--text);
       <a href="#" onclick="showTab('execution');return false" id="nav-execution">Execution</a>
     </nav>
     <div class="site-meta">Version 1.0<br>17 June 2026</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 </header>
 
@@ -2097,6 +2114,16 @@ function tick(cb){cb.closest('.task').classList.toggle('done',cb.checked);update
 function sp(sel){sel.className=sel.value==='A'?'pri-a':sel.value==='B'?'pri-b':sel.value==='C'?'pri-c':'';}
 function exportPlanner(){var lines=['SPOKE 90-DAY SPRINT: PLANNER BRIEF','Generated: '+new Date().toLocaleDateString('en-NZ'),''];document.querySelectorAll('.project').forEach(function(proj){var name=proj.querySelector('.proj-name');if(name)lines.push('\n== '+name.textContent.toUpperCase()+' ==');proj.querySelectorAll('.task').forEach(function(task,i){var title=task.querySelector('.t-title'),owner=task.querySelector('input.oi'),dl=task.querySelector('.t-dl');if(title){lines.push((i+1)+'. '+title.textContent.trim());if(owner)lines.push('   Owner: '+owner.value);if(dl)lines.push('   Deadline: '+dl.textContent.trim());lines.push('   Status: '+(task.classList.contains('done')?'COMPLETE':'PENDING'));}});});var out=document.getElementById('export-out');if(out){out.textContent=lines.join('\n');out.style.display='block';}}
 updateProgress();
+
+// Logout function
+async function logout() {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/login.html';
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+}
 </script>
 </body>
 </html>
