@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Spoke Operating System</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mineral: #40514F;
+      --zest: #BEDA81;
+      --stone: #EDEDE1;
+      --paper: #FAFAF4;
+      --black: #1A1418;
+      --muted: #68716E;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--mineral) 0%, #2a3a38 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: var(--paper);
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 48px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      color: var(--mineral);
+      margin-bottom: 8px;
+    }
+
+    .login-header p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    input[type="email"]:focus {
+      outline: none;
+      border-color: var(--zest);
+      box-shadow: 0 0 0 3px rgba(190, 218, 129, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 24px;
+      background: var(--zest);
+      color: var(--black);
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #a4c767;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--zest);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>Spoke OS</h1>
+      <p>Secure Login</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="edward@spoke.nz"
+          required
+          autocomplete="email"
+        >
+      </div>
+
+      <button type="submit" id="submitBtn">
+        Send Magic Link
+      </button>
+    </form>
+
+    <div id="message" class="message"></div>
+    <div id="loading" class="loading">
+      <span class="spinner"></span>
+      Sending magic link...
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageDiv = document.getElementById('message');
+    const loadingDiv = document.getElementById('loading');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        showMessage('Please enter an email address', 'error');
+        return;
+      }
+
+      // Show loading state
+      submitBtn.disabled = true;
+      loadingDiv.classList.add('show');
+      messageDiv.classList.remove('show');
+
+      try {
+        const response = await fetch('/api/auth/request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email })
+        });
+
+        if (response.ok) {
+          showMessage(
+            'Check your email for a magic login link. It expires in 1 hour.',
+            'success'
+          );
+          emailInput.value = '';
+        } else {
+          showMessage(
+            'Unable to send magic link. Please try again.',
+            'error'
+          );
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage('An error occurred. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        loadingDiv.classList.remove('show');
+      }
+    });
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = `message ${type} show`;
+    }
+  </script>
+</body>
+</html>

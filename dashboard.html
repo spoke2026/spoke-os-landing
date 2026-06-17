@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spoke Operating System - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mineral: #40514F;
+      --zest: #BEDA81;
+      --zest-dark: #7A9650;
+      --stone: #EDEDE1;
+      --white: #FFFFFF;
+      --text: #2A2A2A;
+      --text-light: #666666;
+      --border: rgba(64, 81, 79, 0.15);
+      --warn: #b04a4a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--stone);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Auth Gate */
+    .auth-gate {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .auth-gate.hidden {
+      display: none;
+    }
+
+    .auth-loading {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--zest);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 24px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Header with logout */
+    .site-header {
+      background: var(--mineral);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .site-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .site-logo-text {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 18px 0;
+    }
+
+    .logout-btn {
+      background: var(--zest);
+      color: var(--black);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .logout-btn:hover {
+      background-color: #a4c767;
+    }
+
+    /* Content */
+    .page {
+      padding: 52px 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: var(--paper);
+      padding: 64px 52px;
+      border-radius: 8px;
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(40px, 5.5vw, 68px);
+      color: var(--mineral);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-light);
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .secure-badge {
+      display: inline-block;
+      background: rgba(190, 218, 129, 0.2);
+      color: var(--zest-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Gate -->
+  <div id="authGate" class="auth-gate">
+    <div class="auth-loading">
+      <div class="spinner"></div>
+      <h2>Verifying authentication...</h2>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="site-logo-text">Spoke OS - Protected</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="page">
+    <div class="hero">
+      <span class="secure-badge">🔒 Authenticated Access</span>
+      <h1>Welcome to Spoke OS</h1>
+      <p>You have successfully logged in. This content is protected and only accessible to authorized users. Your session will expire after 24 hours.</p>
+    </div>
+
+    <!-- Your main content goes here - this will be the index.html content -->
+    <div id="mainContent">
+      <!-- Main content will be injected here -->
+    </div>
+  </div>
+
+  <script>
+    // Check authentication on page load
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/auth/check');
+        const data = await response.json();
+
+        if (data.authenticated) {
+          // User is authenticated, hide auth gate
+          document.getElementById('authGate').classList.add('hidden');
+        } else {
+          // User is not authenticated, redirect to login
+          window.location.href = '/login.html';
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = '/login.html';
+      }
+    }
+
+    async function logout() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        window.location.href = '/login.html';
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    }
+
+    // Check auth when page loads
+    document.addEventListener('DOMContentLoaded', checkAuth);
+  </script>
+</body>
+</html>

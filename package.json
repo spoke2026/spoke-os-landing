@@ -1,12 +1,18 @@
 {
   "name": "spoke-os-landing",
   "version": "1.0.0",
-  "description": "Spoke Operating System - branded giveaway products landing page",
+  "description": "Spoke Operating System - branded giveaway products landing page with secure authentication",
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'Static HTML - no build needed'"
+    "build": "echo 'Static HTML with serverless functions'"
   },
-  "keywords": ["spoke", "landing", "giveaway"],
+  "keywords": ["spoke", "landing", "giveaway", "authentication"],
   "author": "Edward",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "resend": "^3.0.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
 }
