@@ -45,10 +45,9 @@ export default async function handler(req, res) {
     const sessionToken = crypto.randomBytes(32).toString('hex');
 
     // Set httpOnly cookie with session
-    res.setHeader(
-      'Set-Cookie',
-      `auth_session=${sessionToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`
-    );
+    const cookieHeader = `auth_session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`;
+    console.log('[TOTP] Setting cookie:', cookieHeader);
+    res.setHeader('Set-Cookie', cookieHeader);
 
     console.log('[TOTP] Session created, redirecting to dashboard');
 

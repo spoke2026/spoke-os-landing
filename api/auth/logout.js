@@ -6,7 +6,7 @@ export default function handler(req, res) {
   // Clear auth cookie
   res.setHeader(
     'Set-Cookie',
-    'auth_session=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0'
+    'auth_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
   );
 
   return res.status(200).json({ message: 'Logged out successfully' });
