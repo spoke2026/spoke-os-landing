@@ -6,8 +6,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { code } = req.body;
-  const totp_secret = process.env.TOTP_SECRET;
+  const { code, username } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ error: 'Username required' });
+  }
+
+  // Get per-user TOTP secret from environment
+  const envKey = `AUTH_TOTP_${username.toUpperCase()}`;
+  const totp_secret = process.env[envKey];
 
   const debugInfo = {
     timestamp: new Date().toISOString(),

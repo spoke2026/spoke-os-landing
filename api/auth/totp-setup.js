@@ -7,17 +7,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    const totpSecret = process.env.TOTP_SECRET;
+    const { username } = req.body;
 
-    if (!totpSecret) {
-      return res.status(500).json({ error: 'TOTP not configured' });
+    if (!username) {
+      return res.status(400).json({ error: 'Username required' });
     }
 
-    // Generate QR code URL using the environment secret
+    // Get per-user TOTP secret from environment (e.g., AUTH_TOTP_spoke)
+    const envKey = `AUTH_TOTP_${username.toUpperCase()}`;
+    let totpSecret = process.env[envKey];
+
+    if (!totpSecret) {
+      // Secret not found - return error with instructions
+      return res.status(400).json({
+        error: 'User TOTP secret not configured',
+        message: `Please add ${envKey} to environment variables in Vercel`,
+        help: 'Contact administrator to set up your authenticator'
+      });
+    }
+
+    console.log(`[TOTP] Using secret for user: ${username}`);
+
+    // Generate QR code URL using the user's secret
     const otpauthUrl = speakeasy.otpauthURL({
       secret: totpSecret,
       encoding: 'base32',
-      label: 'Spoke OS',
+      label: `Spoke OS (${username})`,
       issuer: 'Spoke'
     });
 
@@ -26,7 +41,8 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       secret: totpSecret,
-      qrCode: qrCode
+      qrCode: qrCode,
+      user: username
     });
   } catch (error) {
     console.error('TOTP setup error:', error);
