@@ -1,0 +1,12 @@
+{
+  "name": "spoke-os-landing",
+  "version": "1.0.0",
+  "description": "Spoke Operating System - branded giveaway products landing page",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static HTML - no build needed'"
+  },
+  "keywords": ["spoke", "landing", "giveaway"],
+  "author": "Edward",
+  "license": "MIT"
+}
