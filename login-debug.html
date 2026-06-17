@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Debug - Spoke OS</title>
+  <link rel="icon" href="/spokefavcon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #40514F;
+      min-height: 100vh;
+      padding: 20px;
+      color: white;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin: 20px 0;
+    }
+    input, button {
+      padding: 12px;
+      font-size: 16px;
+      width: 100%;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    button {
+      background: #BEDA81;
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #a4c767;
+    }
+    .debug-log {
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-size: 12px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .debug-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .success {
+      color: #90EE90;
+    }
+    .error {
+      color: #FF6B6B;
+    }
+    .info {
+      color: #87CEEB;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Spoke OS Login - Debug</h1>
+
+    <div class="form-group">
+      <label>Enter 6-digit code from Google Authenticator:</label>
+      <input type="text" id="code" placeholder="000000" maxlength="6" inputmode="numeric" />
+      <button onclick="verifyCode()">Verify Code</button>
+    </div>
+
+    <div class="debug-log" id="debugLog">
+      <div class="debug-entry info">Debug log will appear here...</div>
+    </div>
+  </div>
+
+  <script>
+    function log(message, type = 'info') {
+      const debugLog = document.getElementById('debugLog');
+      const entry = document.createElement('div');
+      entry.className = `debug-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      debugLog.appendChild(entry);
+      debugLog.scrollTop = debugLog.scrollHeight;
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    async function verifyCode() {
+      const code = document.getElementById('code').value.trim();
+
+      log(`Attempting verification with code: ${code}`, 'info');
+
+      if (!code || code.length !== 6) {
+        log('Error: Code must be exactly 6 digits', 'error');
+        return;
+      }
+
+      try {
+        log('Sending request to /api/auth/totp-verify...', 'info');
+
+        const response = await fetch('/api/auth/totp-verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+          credentials: 'include'
+        });
+
+        log(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+
+        const data = await response.json();
+        log(`Response data: ${JSON.stringify(data)}`, 'info');
+
+        if (response.ok) {
+          log('✓ Authentication successful!', 'success');
+          log('Redirecting to dashboard in 2 seconds...', 'success');
+          setTimeout(() => {
+            window.location.href = '/dashboard.html';
+          }, 2000);
+        } else {
+          log(`✗ Authentication failed: ${data.error}`, 'error');
+          document.getElementById('code').value = '';
+        }
+      } catch (error) {
+        log(`Network/fetch error: ${error.message}`, 'error');
+      }
+    }
+
+    // Auto-submit on 6 digits
+    document.getElementById('code').addEventListener('input', function() {
+      if (this.value.length === 6) {
+        log('6 digits entered, auto-submitting...', 'info');
+        verifyCode();
+      }
+    });
+
+    log('Page loaded. Ready for input.', 'success');
+  </script>
+</body>
+</html>
