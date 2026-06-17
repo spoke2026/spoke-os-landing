@@ -9,54 +9,97 @@ export default async function handler(req, res) {
   const { code } = req.body;
   const totp_secret = process.env.TOTP_SECRET;
 
-  console.log('[TOTP] Verification attempt:', {
-    code: code,
-    hasSecret: !!totp_secret,
-    secretLength: totp_secret?.length
-  });
+  const debugInfo = {
+    timestamp: new Date().toISOString(),
+    code_received: code,
+    code_type: typeof code,
+    code_length: String(code).length,
+    secret_exists: !!totp_secret,
+    secret_length: totp_secret?.length,
+    secret_first_chars: totp_secret?.substring(0, 10) + '...'
+  };
+
+  console.log('[TOTP] VERIFICATION ATTEMPT:', JSON.stringify(debugInfo));
 
   if (!code || !totp_secret) {
-    console.log('[TOTP] Missing code or secret');
-    return res.status(400).json({ error: 'Invalid request', missing: !code ? 'code' : 'secret' });
+    console.log('[TOTP] MISSING:', { code: !!code, secret: !!totp_secret });
+    return res.status(400).json({ error: 'Invalid request', debug: debugInfo });
   }
 
   try {
-    // Verify the TOTP code - convert to string and remove any whitespace
     const codeStr = String(code).trim();
-    console.log('[TOTP] Verifying code:', codeStr, 'length:', codeStr.length);
 
-    const verified = speakeasy.totp.verify({
+    // Generate what the current code SHOULD be
+    const expectedCode = speakeasy.totp({
+      secret: totp_secret,
+      encoding: 'base32'
+    });
+
+    console.log('[TOTP] CODE COMPARISON:', {
+      received: codeStr,
+      expected: expectedCode,
+      match: codeStr === expectedCode
+    });
+
+    // Try verification with different window sizes to see what works
+    const verify0 = speakeasy.totp.verify({
       secret: totp_secret,
       encoding: 'base32',
       token: codeStr,
-      window: 2 // Allow codes from ±30 seconds
+      window: 0
     });
 
-    console.log('[TOTP] Verification result:', verified);
+    const verify2 = speakeasy.totp.verify({
+      secret: totp_secret,
+      encoding: 'base32',
+      token: codeStr,
+      window: 2
+    });
+
+    const verify4 = speakeasy.totp.verify({
+      secret: totp_secret,
+      encoding: 'base32',
+      token: codeStr,
+      window: 4
+    });
+
+    console.log('[TOTP] VERIFY RESULTS:', {
+      window_0: verify0,
+      window_2: verify2,
+      window_4: verify4
+    });
+
+    const verified = verify2 || verify4;
 
     if (!verified) {
-      console.log('[TOTP] Code verification failed');
-      return res.status(401).json({ error: 'Invalid code' });
+      console.log('[TOTP] VERIFICATION FAILED - Code mismatch');
+      return res.status(401).json({
+        error: 'Invalid code',
+        debug: {
+          received: codeStr,
+          expected: expectedCode,
+          verify_window_0: verify0,
+          verify_window_2: verify2,
+          verify_window_4: verify4
+        }
+      });
     }
 
-    console.log('[TOTP] Code verified, creating session');
+    console.log('[TOTP] CODE VERIFIED - Creating session');
 
-    // Generate session token
     const sessionToken = crypto.randomBytes(32).toString('hex');
-
-    // Set httpOnly cookie with session
     const cookieHeader = `auth_session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`;
-    console.log('[TOTP] Setting cookie:', cookieHeader);
-    res.setHeader('Set-Cookie', cookieHeader);
 
-    console.log('[TOTP] Session created, redirecting to dashboard');
+    console.log('[TOTP] SETTING COOKIE');
+    res.setHeader('Set-Cookie', cookieHeader);
 
     res.status(200).json({
       authenticated: true,
-      message: 'Successfully authenticated'
+      message: 'Successfully authenticated',
+      debug: { sessionToken: sessionToken.substring(0, 10) + '...' }
     });
   } catch (error) {
-    console.error('[TOTP] Verification error:', error);
+    console.error('[TOTP] ERROR:', error.message, error.stack);
     res.status(500).json({ error: 'Authentication failed', details: error.message });
   }
 }
