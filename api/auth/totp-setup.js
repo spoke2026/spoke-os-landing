@@ -13,8 +13,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Username required' });
     }
 
-    // Get per-user TOTP secret from environment (e.g., AUTH_TOTP_spoke)
-    const envKey = `AUTH_TOTP_${username.toUpperCase()}`;
+    // Extract just the username part (before @ if email)
+    const usernamePart = username.split('@')[0];
+
+    // Get per-user TOTP secret from environment (e.g., AUTH_TOTP_edward)
+    const envKey = `AUTH_TOTP_${usernamePart.toUpperCase()}`;
     let totpSecret = process.env[envKey];
 
     if (!totpSecret) {
