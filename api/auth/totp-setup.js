@@ -19,6 +19,21 @@ export default async function handler(req, res) {
     const usernamePart = username.split('@')[0];
     const envKey = `AUTH_TOTP_${usernamePart.toUpperCase()}`;
 
+    // Check if user has already completed setup
+    const setupUsers = (process.env.SETUP_USERS || '').split(',').map(u => u.trim().toLowerCase()).filter(u => u);
+    const isAlreadySetup = setupUsers.includes(usernamePart.toLowerCase());
+
+    console.log('[TOTP-SETUP] Setup users list:', setupUsers);
+    console.log('[TOTP-SETUP] Is already setup:', isAlreadySetup);
+
+    if (isAlreadySetup) {
+      console.log('[TOTP-SETUP] User already set up, denying QR code generation');
+      return res.status(400).json({
+        error: 'already_setup',
+        message: 'You have already set up your authenticator. Enter your 6-digit code below.'
+      });
+    }
+
     console.log('[TOTP-SETUP] Looking for env key:', envKey);
     console.log('[TOTP-SETUP] Available env keys:', Object.keys(process.env).filter(k => k.startsWith('AUTH_TOTP')));
 
@@ -51,7 +66,8 @@ export default async function handler(req, res) {
     res.status(200).json({
       secret: totpSecret,
       qrCode: qrCode,
-      user: username
+      user: username,
+      isFirstTime: true
     });
   } catch (error) {
     console.error('TOTP setup error:', error);

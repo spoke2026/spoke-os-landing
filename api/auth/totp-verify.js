@@ -96,6 +96,7 @@ export default async function handler(req, res) {
     }
 
     console.log('[TOTP] CODE VERIFIED - Creating session');
+    console.log(`[TOTP] IMPORTANT: Admin must add '${usernamePart}' to SETUP_USERS env var on Vercel to prevent QR code re-display on future logins`);
 
     const sessionToken = crypto.randomBytes(32).toString('hex');
     const cookieHeader = `auth_session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=86400`;

@@ -380,16 +380,37 @@
       document.getElementById('step1').classList.add('complete');
       document.getElementById('step2').classList.add('active');
 
-      // Check if user has already set up authenticator
-      const setupKey = `totp_setup_${currentUsername}`;
-      isFirstTimeSetup = !localStorage.getItem(setupKey);
+      // Check server to see if user has already set up authenticator
+      try {
+        const response = await fetch('/api/auth/totp-setup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: currentUsername }),
+          credentials: 'include'
+        });
+        const data = await response.json();
 
-      if (isFirstTimeSetup) {
-        // First time: show QR code automatically
-        showQRCode();
-      } else {
-        // Already set up: show prompt to reveal QR if needed
-        document.getElementById('setupPrompt').style.display = 'block';
+        if (response.ok && data.secret) {
+          // First time setup: show QR code
+          document.getElementById('qrContainer').classList.add('show');
+          document.getElementById('setupPrompt').style.display = 'none';
+          document.getElementById('secretKey').textContent = data.secret;
+
+          const otpauthUrl = `otpauth://totp/Spoke OS (${currentUsername})?secret=${data.secret}&issuer=Spoke`;
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauthUrl)}`;
+          document.getElementById('qrCode').src = qrUrl;
+
+          // Mark that we showed the QR this session
+          localStorage.setItem(`totp_setup_${currentUsername}`, 'true');
+        } else if (data.error === 'already_setup') {
+          // Already set up: hide all setup UI, just show code input
+          document.getElementById('setupPrompt').style.display = 'none';
+          document.getElementById('qrContainer').classList.remove('show');
+        }
+      } catch (error) {
+        console.error('Failed to check authenticator setup:', error);
+        // Default to already set up (safer fallback)
+        document.getElementById('setupPrompt').style.display = 'none';
         document.getElementById('qrContainer').classList.remove('show');
       }
 
@@ -408,6 +429,14 @@
           credentials: 'include'
         });
         const data = await response.json();
+
+        // Check if user has already been set up
+        if (!response.ok && data.error === 'already_setup') {
+          document.getElementById('qrContainer').classList.remove('show');
+          document.getElementById('setupPrompt').style.display = 'none';
+          showMessage(document.getElementById('authMessage'), data.message || 'Enter your authenticator code', 'success');
+          return;
+        }
 
         if (!data.secret) {
           showMessage(document.getElementById('authMessage'), 'Failed to get authenticator setup', 'error');
