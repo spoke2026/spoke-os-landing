@@ -388,13 +388,16 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 .value-body{font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)}
 
 /* HEDGEHOG */
-.hedgehog-wrap{display:flex;align-items:center;justify-content:center;margin:24px 0;flex-wrap:wrap;gap:24px}
+.hedgehog-wrap{display:flex;align-items:center;justify-content:center;margin:var(--space-6) 0;flex-wrap:wrap;gap:var(--space-6)}
 .hedgehog-svg{flex-shrink:0}
-.hedgehog-legend{display:flex;flex-direction:column;gap:12px}
-.hedgehog-item{display:flex;align-items:flex-start;gap:10px}
-.hedgehog-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.hedgehog-text h4{font-size:14px;font-weight:600;color:var(--mineral);margin-bottom:4px}
-.hedgehog-text p{font-size:12px;color:var(--text-light);line-height:1.5}
+.hedgehog-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);border-top:1px solid var(--border-soft);padding-top:var(--space-7);width:100%;max-width:600px}
+.hedgehog-item{display:flex;flex-direction:column;gap:var(--space-3)}
+.hedgehog-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0}
+.hedgehog-dot.best{background:var(--mineral-900)}
+.hedgehog-dot.passion{background:var(--zest-700)}
+.hedgehog-dot.engine{background:var(--white);border:2px solid var(--mineral-500)}
+.hedgehog-text h4{font-size:var(--text-md);font-weight:var(--weight-bold);color:var(--text-strong);margin:0 0 var(--space-2);line-height:var(--leading-snug)}
+.hedgehog-text p{font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed);margin:0}
 
 /* VSBE MAPPING */
 .vsbe-map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
@@ -816,36 +819,33 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   <!-- HEDGEHOG -->
   <div class="subey">Our purpose: the hedgehog concept</div>
   <div class="hedgehog-wrap">
-    <svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto">
-    <!-- Three overlapping circles -->
-    <circle cx="240" cy="140" r="110" fill="rgba(64,81,79,0.1)" stroke="#40514F" stroke-width="1.5"/>
-    <circle cx="165" cy="270" r="110" fill="rgba(190,218,129,0.2)" stroke="#7A9650" stroke-width="1.5"/>
-    <circle cx="315" cy="270" r="110" fill="rgba(237,237,225,0.6)" stroke="#40514F" stroke-width="1"/>
-    <!-- Top circle label -->
-    <text x="240" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Best in the world at</text>
-    <text x="240" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Removing Complexity</text>
-    <!-- Bottom left label -->
-    <text x="80" y="392" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Deeply passionate about</text>
-    <text x="80" y="408" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Eliminating Waste</text>
-    <!-- Bottom right label -->
-    <text x="400" y="392" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Economic engine</text>
-    <text x="400" y="408" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Scalable Success</text>
-    <!-- Centre purpose text -->
-    <text x="240" y="216" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">Gearing up</text>
-    <text x="240" y="235" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">workforces and</text>
-    <text x="240" y="254" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">amplifying your brand</text>
-  </svg>
+    <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto" role="img" aria-label="Hedgehog concept Venn diagram">
+      <g style="mix-blend-mode:multiply">
+        <circle cx="300" cy="233" r="160" fill="rgba(171, 184, 195, 0.3)" stroke="rgba(64,81,79,0.32)" stroke-width="1.5"/>
+        <circle cx="215" cy="383" r="160" fill="rgba(212, 231, 171, 0.3)" stroke="rgba(94,115,51,0.32)" stroke-width="1.5"/>
+        <circle cx="385" cy="383" r="160" fill="rgba(228, 226, 210, 0.3)" stroke="rgba(64,81,79,0.30)" stroke-width="1.5"/>
+      </g>
+      <text x="300" y="50" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Best in the world at</text>
+      <text x="300" y="71" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Removing Complexity</text>
+      <text x="150" y="567" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Deeply passionate about</text>
+      <text x="150" y="588" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Eliminating Waste</text>
+      <text x="450" y="567" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Economic engine</text>
+      <text x="450" y="588" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Scalable Success</text>
+      <text x="300" y="312" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">Gearing up</text>
+      <text x="300" y="338" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">workforces and</text>
+      <text x="300" y="364" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">amplifying your brand</text>
+    </svg>
     <div class="hedgehog-legend">
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#40514F"></div>
+        <div class="hedgehog-dot best"></div>
         <div class="hedgehog-text"><h4>Best in the world at</h4><p>Removing complexity. Frictionless ordering, persona-led curation, zero admin.</p></div>
       </div>
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#7A9650"></div>
+        <div class="hedgehog-dot passion"></div>
         <div class="hedgehog-text"><h4>Deeply passionate about</h4><p>Eliminating waste and inefficiency across the supply chain and the customer experience.</p></div>
       </div>
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#EDEDE1;border:1px solid #40514F"></div>
+        <div class="hedgehog-dot engine"></div>
         <div class="hedgehog-text"><h4>Economic engine</h4><p>Scalable success. The easier we make it for operations to gear up, the faster we grow with them.</p></div>
       </div>
     </div>
@@ -930,37 +930,34 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   <div class="subhead-eyebrow">Our purpose: the hedgehog concept</div>
   <p class="prose">The intersection of what Spoke is best in the world at, what drives the economic engine, and what the team is deeply passionate about.</p>
   <div class="hedgehog-wrap">
-    <svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto">
-    <!-- Three overlapping circles -->
-    <circle cx="240" cy="140" r="110" fill="rgba(64,81,79,0.1)" stroke="#40514F" stroke-width="1.5"/>
-    <circle cx="165" cy="270" r="110" fill="rgba(190,218,129,0.2)" stroke="#7A9650" stroke-width="1.5"/>
-    <circle cx="315" cy="270" r="110" fill="rgba(237,237,225,0.6)" stroke="#40514F" stroke-width="1"/>
-    <!-- Top circle label -->
-    <text x="240" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Best in the world at</text>
-    <text x="240" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Removing Complexity</text>
-    <!-- Bottom left label -->
-    <text x="80" y="392" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Deeply passionate about</text>
-    <text x="80" y="408" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Eliminating Waste</text>
-    <!-- Bottom right label -->
-    <text x="400" y="392" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#40514F" font-weight="600">Economic engine</text>
-    <text x="400" y="408" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#7A9650">Scalable Success</text>
-    <!-- Centre purpose text -->
-    <text x="240" y="216" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">Gearing up</text>
-    <text x="240" y="235" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">workforces and</text>
-    <text x="240" y="254" text-anchor="middle" font-family="DM Serif Display,serif" font-size="15" fill="#40514F" font-style="italic">amplifying your brand</text>
-  </svg>
+    <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto" role="img" aria-label="Hedgehog concept Venn diagram">
+      <g style="mix-blend-mode:multiply">
+        <circle cx="300" cy="233" r="160" fill="rgba(171, 184, 195, 0.3)" stroke="rgba(64,81,79,0.32)" stroke-width="1.5"/>
+        <circle cx="215" cy="383" r="160" fill="rgba(212, 231, 171, 0.3)" stroke="rgba(94,115,51,0.32)" stroke-width="1.5"/>
+        <circle cx="385" cy="383" r="160" fill="rgba(228, 226, 210, 0.3)" stroke="rgba(64,81,79,0.30)" stroke-width="1.5"/>
+      </g>
+      <text x="300" y="50" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Best in the world at</text>
+      <text x="300" y="71" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Removing Complexity</text>
+      <text x="150" y="567" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Deeply passionate about</text>
+      <text x="150" y="588" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Eliminating Waste</text>
+      <text x="450" y="567" text-anchor="middle" font-family="var(--font-sans)" font-weight="700" font-size="16" fill="var(--text-strong)">Economic engine</text>
+      <text x="450" y="588" text-anchor="middle" font-family="var(--font-sans)" font-weight="600" font-size="14" letter-spacing="0.02em" fill="var(--zest-800)">Scalable Success</text>
+      <text x="300" y="312" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">Gearing up</text>
+      <text x="300" y="338" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">workforces and</text>
+      <text x="300" y="364" text-anchor="middle" font-family="var(--font-display)" font-style="italic" font-size="23" fill="var(--text-strong)">amplifying your brand</text>
+    </svg>
     <div class="hedgehog-legend">
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#40514F"></div>
+        <div class="hedgehog-dot best"></div>
         <div class="hedgehog-text"><h4>Best in the world at</h4><p>Removing complexity. Frictionless ordering, persona-led curation, zero admin.</p></div>
       </div>
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#7A9650"></div>
+        <div class="hedgehog-dot passion"></div>
         <div class="hedgehog-text"><h4>Deeply passionate about</h4><p>Eliminating waste and inefficiency across the supply chain and the customer experience.</p></div>
       </div>
       <div class="hedgehog-item">
-        <div class="hedgehog-dot" style="background:#EDEDE1;border:1px solid #40514F"></div>
-        <div class="hedgehog-text"><h4>Economic engine</h4><p>Scalable success. The easier we make it to gear up, the faster we grow with them.</p></div>
+        <div class="hedgehog-dot engine"></div>
+        <div class="hedgehog-text"><h4>Economic engine</h4><p>Scalable success. The easier we make it for operations to gear up, the faster we grow with them.</p></div>
       </div>
     </div>
   </div>
