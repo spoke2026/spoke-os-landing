@@ -204,7 +204,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 .site-nav a:hover{color:var(--action-accent)}
 .site-nav a.active{color:var(--white);border-bottom-color:var(--action-accent)}
 .site-meta{font-size:var(--text-2xs);color:rgba(255,255,255,0.3);text-align:right;line-height:var(--leading-normal)}
-.logout-btn{background:var(--action-accent);color:var(--text-strong);border:none;padding:var(--space-2) var(--space-4);border-radius:var(--radius-md);font-size:var(--text-2xs);font-weight:var(--weight-semibold);cursor:pointer;transition:all var(--duration-base) var(--ease-standard)}
+.logout-btn{background:var(--action-accent);color:var(--text-strong);border:none;padding:var(--space-3) var(--space-5);border-radius:var(--radius-md);font-size:var(--text-2xs);font-weight:var(--weight-semibold);cursor:pointer;transition:all var(--duration-base) var(--ease-standard);min-height:44px;display:flex;align-items:center;justify-content:center}
 .logout-btn:hover{background-color:var(--action-accent-hover);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .logout-btn:active{transform:translateY(0)}
 
@@ -345,7 +345,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 .prog-fill{background:var(--mineral);height:100%;border-radius:4px;transition:width 0.3s}
 
 /* EXPORT */
-.export-btn{background:var(--zest-dark);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:16px}
+.export-btn{background:var(--zest-dark);color:#fff;border:none;padding:var(--space-3) var(--space-5);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:16px;min-height:44px;display:flex;align-items:center;justify-content:center}
 .export-out{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:16px;display:none;font-size:12px;font-family:monospace;white-space:pre-wrap;color:var(--text);max-height:350px;overflow-y:auto;line-height:1.655}
 
 /* MILESTONE TABLE */
@@ -491,6 +491,12 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .vsbe-map{grid-template-columns:1fr 1fr}
   .deliver-strip{grid-template-columns:1fr 1fr}
   .sm-cards{grid-template-columns:1fr 1fr}
+  .card-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:1fr}
+  .hedgehog-legend{grid-template-columns:1fr}
+  .ptw-grid{grid-template-columns:1fr}
+  .scoring-grid{grid-template-columns:1fr}
+  .persona-universal,.persona-hort{grid-template-columns:1fr}
   .page,.page-wide{padding:var(--space-6) var(--space-4)}
   .site-header-inner{flex-wrap:wrap}
   .site-nav{overflow-x:auto;width:100%}
