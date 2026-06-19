@@ -1,6 +1,29 @@
 # Spoke OS - Design System
 
-The design system ensures visual consistency across all pages through standardized colors, typography, spacing, and components.
+**Status:** Fully implemented across login.html, index.html, and strategy.html  
+**Last Updated:** June 19, 2026  
+**Implementation:** 95%+ on production pages
+
+The design system ensures visual consistency across all pages through standardized colors, typography, spacing, and components. The Spoke Solutions Design System has been fully integrated into the core pages with complete token usage, responsive design, and interactive enhancements.
+
+## Implementation Notes (June 2026)
+
+### Recent Enhancements
+- **Core Values & How We Deliver Cards**: Now feature left-border accent styling (3px zest color) matching the strategy page design
+- **Hedgehog Concept**: Complete redesign with multiply blend mode circles, improved SVG rendering, and grid-based legend layout
+- **Playing to Win Cascade**: Added interactive hover effects (zest background highlights)
+- **Interactive States**: Smooth transitions on all interactive elements using --ease-standard and --duration-base
+- **Text Layout**: Removed max-width constraints for full section width consistency
+
+### Key Principles
+- All colors use CSS variables (no hardcoded hex values)
+- All spacing uses 8px base grid system (--space-* tokens)
+- All typography uses semantic naming (--text-3xs through --text-6xl)
+- All interactions include smooth transitions with motion tokens
+- Responsive design uses 768px breakpoint with auto-fit grids
+- Left-border accents (3px) used for card sections, hover states for interactive elements
+
+---
 
 ## 1. Color Palette
 
