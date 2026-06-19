@@ -507,6 +507,10 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .pipeline-wrap{grid-template-columns:1fr}
   .brandforce-config-grid{grid-template-columns:repeat(2,1fr)!important}
   .friction-grid{grid-template-columns:repeat(2,1fr)!important}
+  .cap-grid{grid-template-columns:1fr}
+  .mgmt-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}
+  .indent-grid{grid-template-columns:repeat(2,1fr)}
+  .mkt-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}
   .data-table{min-width:auto}
   .ptw-cell{padding:24px}
   .badge{white-space:normal}
@@ -758,19 +762,30 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .friction-grid{grid-template-columns:1fr!important}
   .levers-grid{grid-template-columns:1fr}
   .brandforce-config-grid{grid-template-columns:1fr!important}
-  /* Inline style grid override for frictionless engine (3-col) */
-  .section > div[style*="grid-template-columns: repeat(3"] {
+  .cap-grid{grid-template-columns:1fr}
+  .mgmt-grid{grid-template-columns:1fr}
+  .indent-grid{grid-template-columns:1fr}
+  .mkt-grid{grid-template-columns:1fr}
+  /* Inline style grid overrides */
+  div[style*="grid-template-columns: repeat(3"] {
     grid-template-columns: repeat(2, 1fr) !important;
+  }
+  div[style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
   }
 }
 @media(max-width:500px){
   .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
   .brandforce-config-grid{grid-template-columns:1fr!important}
+  .cap-grid{grid-template-columns:1fr}
+  .mgmt-grid{grid-template-columns:1fr}
+  .indent-grid{grid-template-columns:1fr}
+  .mkt-grid{grid-template-columns:1fr}
   /* Inline style grids on very small screens */
-  .section > div[style*="grid-template-columns: repeat(2"] {
-    grid-template-columns: 1fr !important;
-  }
-  .section > div[style*="grid-template-columns: repeat(3"] {
+  div[style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
   }
 }
