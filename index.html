@@ -497,6 +497,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .sm-cards{grid-template-columns:1fr 1fr}
   .card-grid{grid-template-columns:1fr}
   .values-grid{grid-template-columns:1fr}
+  .core-values-grid{grid-template-columns:repeat(2,1fr)!important}
   .hedgehog-legend{grid-template-columns:1fr}
   .ptw-grid{grid-template-columns:1fr}
   .scoring-grid{grid-template-columns:1fr}
@@ -748,6 +749,9 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 @media(max-width:700px){
   .model-grid,.levers-grid,.persona-universal,.persona-hort,.scoring-grid,.arch-grid,.indent-grid,.cap-grid,.sprint-grid,.pipeline-wrap,.friction-grid,.mgmt-grid{grid-template-columns:1fr}
 }
+@media(max-width:500px){
+  .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
+}
 @media(max-width:375px){
   .section{padding:16px 12px}
   .page,.page-wide{padding:var(--space-4) var(--space-3)}
@@ -949,7 +953,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   </div>
   <div class="subhead-eyebrow">Core values</div>
   <p class="prose">Five values that define how we hire, how we operate, and what we stand for.</p>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0">
+  <div class="core-values-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0">
     <div style="background:#fff;border-radius:10px;padding:24px;border-top:4px solid #40514F"><div style="font-size:14px;font-weight:600;color:#40514F;margin-bottom:6px">Own it.</div><div style="font-size:12px;color:#666;line-height:1.65">If it is yours, it is done. No dropped balls, no blame, full accountability.</div></div>
     <div style="background:#fff;border-radius:10px;padding:24px;border-top:4px solid #40514F"><div style="font-size:14px;font-weight:600;color:#40514F;margin-bottom:6px">Keep it real.</div><div style="font-size:12px;color:#666;line-height:1.65">We say what we mean. Honest with customers, honest with each other. No fluff.</div></div>
     <div style="background:#fff;border-radius:10px;padding:24px;border-top:4px solid #40514F"><div style="font-size:14px;font-weight:600;color:#40514F;margin-bottom:6px">Raise the bar.</div><div style="font-size:12px;color:#666;line-height:1.65">Good enough is not good enough. We push the standard on every job, every system, every interaction.</div></div>
