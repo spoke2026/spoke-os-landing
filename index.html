@@ -505,6 +505,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .levers-grid{grid-template-columns:repeat(2,1fr)}
   .arch-grid{grid-template-columns:1fr}
   .pipeline-wrap{grid-template-columns:1fr}
+  .brandforce-config-grid{grid-template-columns:repeat(2,1fr)!important}
   .friction-grid{grid-template-columns:repeat(2,1fr)!important}
   .data-table{min-width:auto}
   .ptw-cell{padding:24px}
@@ -756,6 +757,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 @media(max-width:600px){
   .friction-grid{grid-template-columns:1fr!important}
   .levers-grid{grid-template-columns:1fr}
+  .brandforce-config-grid{grid-template-columns:1fr!important}
   /* Inline style grid override for frictionless engine (3-col) */
   .section > div[style*="grid-template-columns: repeat(3"] {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -763,6 +765,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 }
 @media(max-width:500px){
   .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
+  .brandforce-config-grid{grid-template-columns:1fr!important}
   /* Inline style grids on very small screens */
   .section > div[style*="grid-template-columns: repeat(2"] {
     grid-template-columns: 1fr !important;
@@ -1359,7 +1362,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   <div class="subhead-eyebrow">The Brandforce configurator</div>
   <p class="prose">The Brandforce configurator guides a customer or Ed through a structured journey from campaign intent to a curated product recommendation with branding, packaging, and delivery options. It creates excitement through visual references and produces a submission that Spoke uses to begin the proposal and sourcing process.</p>
 
-  <div class="card-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="card-grid brandforce-config-grid" style="grid-template-columns:repeat(3,1fr)">
     <div class="card">
       <div class="card-kicker">Entry question</div>
       <div class="card-title">What is the goal of this campaign?</div>
