@@ -498,8 +498,9 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .scoring-grid{grid-template-columns:1fr}
   .persona-universal,.persona-hort{grid-template-columns:1fr}
   .page,.page-wide{padding:var(--space-6) var(--space-4)}
-  .site-header-inner{flex-wrap:wrap}
-  .site-nav{overflow-x:auto;width:100%}
+  .site-header-inner{flex-direction:column;align-items:stretch}
+  .site-nav{flex-direction:column;width:100%;overflow-x:visible;border-top:1px solid rgba(255,255,255,0.1)}
+  .site-nav a{padding:var(--space-4) var(--space-5);border-bottom:1px solid rgba(255,255,255,0.1);border-right:none;white-space:normal}
   .section{padding:var(--space-8) var(--space-5)}
   .section-title{font-size:clamp(var(--text-xl),3vw,var(--text-3xl))}
 }
