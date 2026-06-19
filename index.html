@@ -536,7 +536,10 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 .model-industries strong{color:var(--mineral);font-weight:500}
 
 .ptw-grid{display:grid;grid-template-columns:1fr 1fr;gap:0px;background:var(--border);border-radius:12px;overflow:hidden;margin:32px 0}
-.ptw-cell{background:var(--white);padding:48px}
+.ptw-cell{background:var(--white);padding:48px;transition:all var(--duration-base) var(--ease-standard);cursor:pointer}
+.ptw-cell:hover{background:var(--zest);color:var(--text-strong)}
+.ptw-cell:hover .ptw-question{color:var(--text-strong)}
+.ptw-cell:hover .ptw-detail{color:var(--text-strong)}
 .ptw-cell.full{grid-column:1/-1;background:var(--mineral)}
 .ptw-question{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);margin-bottom:16px}
 .ptw-cell.full .ptw-question{color:rgba(255,255,255,0.5)}
