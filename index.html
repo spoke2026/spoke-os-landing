@@ -209,6 +209,8 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 .logout-btn{background:var(--action-accent);color:var(--text-strong);border:none;padding:var(--space-3) var(--space-5);border-radius:var(--radius-md);font-size:var(--text-2xs);font-weight:var(--weight-semibold);cursor:pointer;transition:all var(--duration-base) var(--ease-standard);min-height:44px;display:flex;align-items:center;justify-content:center}
 .logout-btn:hover{background-color:var(--action-accent-hover);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .logout-btn:active{transform:translateY(0)}
+.site-meta-mobile{display:none;flex-direction:column;gap:var(--space-2);padding:var(--space-4) var(--space-5);border-top:1px solid rgba(255,255,255,0.1);text-align:left;font-size:var(--text-2xs);color:rgba(255,255,255,0.3)}
+.logout-btn-mobile{display:none;width:100%;justify-content:flex-start;margin-top:var(--space-2)}
 
 /* TAB PANELS */
 .tab-panel{display:none}
@@ -508,6 +510,10 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .site-nav{position:absolute;top:100%;left:0;right:0;background:var(--mineral-800);flex-direction:column;width:100%;max-height:0;overflow:hidden;transition:max-height var(--duration-base) var(--ease-standard);border-top:1px solid rgba(255,255,255,0.1)}
   .site-nav.active{max-height:500px}
   .site-nav a{padding:var(--space-4) var(--space-5);border-bottom:1px solid rgba(255,255,255,0.1);border-right:none;white-space:normal}
+  .site-meta{display:none}
+  .logout-btn{display:none}
+  .site-meta-mobile{display:flex}
+  .logout-btn-mobile{display:flex}
   .section{padding:var(--space-8) var(--space-5)}
   .section-title{font-size:clamp(var(--text-xl),3vw,var(--text-3xl))}
 }
@@ -769,6 +775,8 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
       <a href="#" onclick="showTab('strategy');return false" id="nav-strategy">Strategy</a>
       <a href="#" onclick="showTab('budget');return false" id="nav-budget">Budget</a>
       <a href="#" onclick="showTab('execution');return false" id="nav-execution">Execution</a>
+      <div class="site-meta-mobile">Version 1.0<br>17 June 2026</div>
+      <button class="logout-btn logout-btn-mobile" onclick="logout()">Logout</button>
     </nav>
     <div class="site-meta">Version 1.0<br>17 June 2026</div>
     <button class="logout-btn" onclick="logout()">Logout</button>
