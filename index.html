@@ -502,15 +502,15 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .ptw-grid{grid-template-columns:1fr}
   .scoring-grid{grid-template-columns:1fr}
   .persona-universal,.persona-hort{grid-template-columns:1fr}
-  .levers-grid{grid-template-columns:repeat(2,1fr)}
+  .levers-grid{grid-template-columns:1fr}
   .arch-grid{grid-template-columns:1fr}
   .pipeline-wrap{grid-template-columns:1fr}
-  .brandforce-config-grid{grid-template-columns:repeat(2,1fr)!important}
-  .friction-grid{grid-template-columns:repeat(2,1fr)!important}
+  .brandforce-config-grid{grid-template-columns:1fr!important}
+  .friction-grid{grid-template-columns:1fr!important}
   .cap-grid{grid-template-columns:1fr}
-  .mgmt-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}
-  .indent-grid{grid-template-columns:repeat(2,1fr)}
-  .mkt-grid{grid-template-columns:repeat(2,minmax(140px,1fr))}
+  .mgmt-grid{grid-template-columns:1fr}
+  .indent-grid{grid-template-columns:1fr}
+  .mkt-grid{grid-template-columns:1fr}
   .data-table{min-width:auto}
   .ptw-cell{padding:24px}
   .badge{white-space:normal}
@@ -759,35 +759,23 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .model-grid,.levers-grid,.persona-universal,.persona-hort,.scoring-grid,.arch-grid,.indent-grid,.cap-grid,.sprint-grid,.pipeline-wrap,.friction-grid,.mgmt-grid{grid-template-columns:1fr}
 }
 @media(max-width:600px){
-  .friction-grid{grid-template-columns:1fr!important}
-  .levers-grid{grid-template-columns:1fr}
-  .brandforce-config-grid{grid-template-columns:1fr!important}
-  .cap-grid{grid-template-columns:1fr}
-  .mgmt-grid{grid-template-columns:1fr}
-  .indent-grid{grid-template-columns:1fr}
-  .mkt-grid{grid-template-columns:1fr}
-  /* Inline style grid overrides */
+  .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
+  /* Inline style grids collapse to 1 column on mobile */
+  div[style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+  }
   div[style*="grid-template-columns: repeat(3"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: 1fr !important;
   }
   div[style*="grid-template-columns: repeat(4"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: 1fr !important;
   }
   div[style*="grid-template-columns: 1fr 1fr"] {
     grid-template-columns: 1fr !important;
   }
 }
 @media(max-width:500px){
-  .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
-  .brandforce-config-grid{grid-template-columns:1fr!important}
-  .cap-grid{grid-template-columns:1fr}
-  .mgmt-grid{grid-template-columns:1fr}
-  .indent-grid{grid-template-columns:1fr}
-  .mkt-grid{grid-template-columns:1fr}
-  /* Inline style grids on very small screens */
-  div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
+  /* Already handled at 600px, this ensures consistency */
 }
 @media(max-width:375px){
   .section{padding:16px 12px}
