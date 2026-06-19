@@ -497,7 +497,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .sm-cards{grid-template-columns:1fr 1fr}
   .card-grid{grid-template-columns:1fr}
   .values-grid{grid-template-columns:1fr}
-  .core-values-grid{grid-template-columns:repeat(2,1fr)!important}
+  .core-values-grid{grid-template-columns:1fr!important}
   .hedgehog-legend{grid-template-columns:1fr}
   .ptw-grid{grid-template-columns:1fr}
   .scoring-grid{grid-template-columns:1fr}
@@ -507,10 +507,14 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .pipeline-wrap{grid-template-columns:1fr}
   .brandforce-config-grid{grid-template-columns:1fr!important}
   .friction-grid{grid-template-columns:1fr!important}
+  .friction-engine-grid{grid-template-columns:1fr!important}
   .cap-grid{grid-template-columns:1fr}
   .mgmt-grid{grid-template-columns:1fr}
   .indent-grid{grid-template-columns:1fr}
   .mkt-grid{grid-template-columns:1fr}
+  .pipeline-info-grid{grid-template-columns:1fr!important}
+  .scenario-cards-grid{grid-template-columns:repeat(2,1fr)!important}
+  .pause-resume-grid{grid-template-columns:1fr!important}
   .data-table{min-width:auto}
   .ptw-cell{padding:24px}
   .badge{white-space:normal}
@@ -762,6 +766,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   .core-values-grid{grid-template-columns:1fr!important;gap:12px!important}
 }
 @media(max-width:600px){
+  .scenario-cards-grid{grid-template-columns:1fr!important}
   /* Inline style grids collapse to 1 column on mobile */
   div[style*="grid-template-columns: repeat(2"] {
     grid-template-columns: 1fr !important;
@@ -1208,7 +1213,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
 
   <div class="subhead-eyebrow">The frictionless engine</div>
   <p class="prose">Friction removal is not a feature. It is an operating model. Every time a customer hits a wall, that wall is logged, analysed, and removed permanently. Competitors fix complaints. Spoke eliminates the conditions that create them.</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0">
+  <div class="friction-engine-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0">
     <div style="background:#40514F;border-radius:10px;padding:24px;color:#fff"><div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#BEDA81;margin-bottom:8px">The philosophy</div><div style="font-size:14px;line-height:1.65;color:rgba(255,255,255,0.85)">Friction is not a customer service problem. It is a data source. Every hard moment is information. Every repeated hard moment is a failure of the system. We chase the one percenters because they compound.</div></div>
     <div style="background:#fff;border-radius:10px;padding:24px;border:1px solid rgba(64,81,79,0.15)"><div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7A9650;margin-bottom:8px">The mechanic</div><div style="font-size:14px;color:#666;line-height:1.65">Every customer interaction produces one friction sentence logged in HubSpot. Zara reviews it monthly. Patterns become sprint tasks. Sprint tasks become automations or process changes. The customer never hits the same wall twice.</div></div>
     <div style="background:#fff;border-radius:10px;padding:24px;border:1px solid rgba(64,81,79,0.15)"><div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7A9650;margin-bottom:8px">The one percenters</div><div style="font-size:14px;color:#666;line-height:1.65">A customer who reorders in two minutes instead of twenty stays. A customer who gets the right size first time does not return product. Each small win compounds into a defensible moat no catalogue supplier can replicate.</div></div>
@@ -1652,7 +1657,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
   <p class="prose">The detailed sales workflow, pipeline structure, stage definitions, entry and exit criteria, step-by-step processes, Zember handoff requirements, and HubSpot usage guidelines are locked as a complete build brief. Download the full document below.</p>
 
   <div style="background:var(--white);border-radius:12px;padding:24px;margin:20px 0;border:1px solid var(--border)">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div class="pipeline-info-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
       <div>
         <div class="card-kicker">Three pipelines</div>
         <div class="card-title" style="font-size:16px;margin:6px 0">Workforce Revenue, Brandforce Revenue, Bespoke Operations</div>
@@ -1758,7 +1763,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.6rem"><label style="font-size:12px;color:#666;width:260px;flex-shrink:0">Gross profit %</label><input type="range" id="s-gp" min="20" max="55" step="1" value="35" style="flex:1" oninput="updateScenario()"><span id="s-gp-v" style="font-size:14px;font-weight:500;min-width:52px;text-align:right">35%</span></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.6rem"><label style="font-size:12px;color:#666;width:260px;flex-shrink:0">Operating expenses % of revenue</label><input type="range" id="s-opex" min="5" max="40" step="1" value="20" style="flex:1" oninput="updateScenario()"><span id="s-opex-v" style="font-size:14px;font-weight:500;min-width:52px;text-align:right">20%</span></div>
     </div>
-    <div id="s-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0"></div>
+    <div id="s-cards" class="scenario-cards-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0"></div>
     <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;font-size:12px;color:#666">
       <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:4px;background:#40514F;display:inline-block"></span>Workforce/Horticulture</span>
       <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:4px;background:#7A9650;display:inline-block"></span>Brandforce</span>
@@ -1944,7 +1949,7 @@ body{font-family:var(--font-sans);background:var(--surface-page);color:var(--tex
     <p>This is a sales sprint, not a build sprint. For 90 days Spoke focuses on sales execution. Technology builds run only where they directly enable a sale. Ed is in the van. Arne is enabling the van.</p>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
+  <div class="pause-resume-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
     <div>
       <div class="subey" style="margin-top:0">What pauses</div>
       <div class="pill-grid">
