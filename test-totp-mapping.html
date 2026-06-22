@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOTP Mapping Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #40514F;
+      margin-top: 0;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #BEDA81;
+      color: #40514F;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #A8C566;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 4px;
+      display: none;
+    }
+    .result.success {
+      background: #E4EFDD;
+      border: 1px solid #5E8C4E;
+      color: #5E8C4E;
+    }
+    .result.error {
+      background: #F4E0DB;
+      border: 1px solid #B4503F;
+      color: #B4503F;
+    }
+    .result.info {
+      background: #DEEAEE;
+      border: 1px solid #4E6F7D;
+      color: #4E6F7D;
+    }
+    .result h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .result-row {
+      margin: 12px 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 3px;
+    }
+    .result-label {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .result-value {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .status-pass {
+      background: #5E8C4E;
+      color: white;
+    }
+    .status-fail {
+      background: #B4503F;
+      color: white;
+    }
+    .loading {
+      display: none;
+      color: #999;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 TOTP Mapping Test</h1>
+    <p style="color: #666; margin-bottom: 20px;">Test if a user's TOTP secret is correctly mapped and whether QR code will display on login.</p>
+
+    <div class="form-group">
+      <label for="username">User Email:</label>
+      <input
+        type="email"
+        id="username"
+        placeholder="e.g., jherd@focusplan.co.nz"
+        value="jherd@focusplan.co.nz"
+      >
+    </div>
+
+    <button onclick="testMapping()">Test Mapping</button>
+    <div class="loading" id="loading">Testing...</div>
+
+    <div id="result" class="result">
+      <div id="resultContent"></div>
+    </div>
+  </div>
+
+  <script>
+    async function testMapping() {
+      const username = document.getElementById('username').value.trim();
+      const resultDiv = document.getElementById('result');
+      const resultContent = document.getElementById('resultContent');
+      const loading = document.getElementById('loading');
+
+      if (!username) {
+        resultDiv.className = 'result error';
+        resultDiv.style.display = 'block';
+        resultContent.innerHTML = '<h2>❌ Error</h2><p>Please enter a user email.</p>';
+        return;
+      }
+
+      loading.style.display = 'block';
+      resultDiv.style.display = 'none';
+
+      try {
+        const response = await fetch(`/api/auth/test-mapping?testUser=${encodeURIComponent(username)}`);
+        const data = await response.json();
+
+        loading.style.display = 'none';
+
+        if (!response.ok) {
+          resultDiv.className = 'result error';
+          resultDiv.style.display = 'block';
+          resultContent.innerHTML = `<h2>❌ Error</h2><p>${data.error || 'Test failed'}</p>`;
+          return;
+        }
+
+        const qrWillShow = data.wouldShowQRCode;
+        const statusClass = qrWillShow ? 'success' : 'error';
+        const statusBadgeClass = qrWillShow ? 'status-pass' : 'status-fail';
+        const statusText = qrWillShow ? '✅ QR CODE WILL SHOW' : '❌ QR CODE WILL NOT SHOW';
+
+        resultDiv.className = `result ${statusClass}`;
+        resultDiv.style.display = 'block';
+
+        let html = `
+          <h2>${statusText}</h2>
+          <div class="result-row">
+            <div class="result-label">User Email:</div>
+            <div class="result-value">${data.testUser}</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Mapped TOTP Key:</div>
+            <div class="result-value">${data.mappedToTOTPKey}</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Secret Configured:</div>
+            <div class="result-value">${data.secretConfigured ? '✅ Yes' : '❌ No'}</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Already Setup:</div>
+            <div class="result-value">${data.isAlreadySetup ? '✅ Yes (QR code hidden)' : '❌ No (QR code will show)'}</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Username Part:</div>
+            <div class="result-value">${data.usernamePart}</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Setup Users List:</div>
+            <div class="result-value">${data.setupUsers.length > 0 ? data.setupUsers.join(', ') : '(empty)'}</div>
+          </div>
+          <span class="status-badge ${statusBadgeClass}">${data.status}</span>
+        `;
+
+        resultContent.innerHTML = html;
+      } catch (error) {
+        loading.style.display = 'none';
+        resultDiv.className = 'result error';
+        resultDiv.style.display = 'block';
+        resultContent.innerHTML = `<h2>❌ Error</h2><p>${error.message}</p><p style="font-size: 12px; margin-top: 10px;">Make sure you're accessing this from the correct domain.</p>`;
+      }
+    }
+
+    // Test on load with default value
+    window.addEventListener('load', () => {
+      setTimeout(() => testMapping(), 500);
+    });
+  </script>
+</body>
+</html>
