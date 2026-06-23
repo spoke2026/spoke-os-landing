@@ -1,6 +1,15 @@
 import speakeasy from 'speakeasy';
 import crypto from 'crypto';
 
+// Map email addresses to their TOTP secret environment variable keys
+const USER_TO_TOTP_KEY = {
+  'arne@spoke.nz': 'AUTH_TOTP_ARNE',
+  'mark@spoke.nz': 'AUTH_TOTP_MARK',
+  'jherd@focusplan.co.nz': 'AUTH_TOTP_JONATHAN',
+  'sage@spoke.nz': 'AUTH_TOTP_SAGE',
+  'edward@spoke.nz': 'AUTH_TOTP_EDWARD'
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -12,11 +21,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Username required' });
   }
 
-  // Extract just the username part (before @ if email)
+  // Extract just the username part (before @ if email) for setup tracking
   const usernamePart = username.split('@')[0];
 
-  // Get per-user TOTP secret from environment
-  const envKey = `AUTH_TOTP_${usernamePart.toUpperCase()}`;
+  // Get the correct TOTP key from the mapping
+  const envKey = USER_TO_TOTP_KEY[username.toLowerCase()] || `AUTH_TOTP_${usernamePart.toUpperCase()}`;
   const totp_secret = process.env[envKey];
 
   const debugInfo = {
